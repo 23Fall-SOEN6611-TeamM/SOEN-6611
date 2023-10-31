@@ -1,0 +1,184 @@
+\documentclass[english,12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{nameref}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+
+
+\makeatletter
+\def\@makechapterhead#1{
+	\vspace*{0\p@}
+	{\parindent \z@ \raggedright \normalfont
+		\interlinepenalty\@M
+		\Huge \bfseries #1\par\nobreak
+		\vskip 40\p@
+}}
+
+
+\begin{document}
+	\begin{titlepage}
+		\centering
+		\Huge
+		\textbf{PROJECT REPORT}\\
+		\vspace{1cm}
+		\textbf{METRICSTICS}\\
+		\textbf{(DELIVERABLE - 1)}\\
+		\vspace{1.5cm}
+		\Large
+		\textbf{Prepared By}\\
+		\vspace{0.5cm}
+		Sharanyu Pillai(40227794)\\
+		Wei Qi(40198872)\\
+		Anitha Ramakrishnan(40231724)\\
+		Arshiya Sahni(40202614)\\
+		Vinay Sahrawat(40220936)\\
+		\vspace{1.5cm}
+		\large
+		\textbf{Under the Guidance of}\\
+		Prof. Pankaj Kamthan \\
+		\vspace{1.5cm}
+		\textbf{Submitted at}\\
+		CONCORDIA UNIVERSITY\\
+		\centering
+		\includegraphics[width=8cm]{concordia.jpg}
+		\vfill
+		Github:\\
+		\url{https://github.com/WeiQi5588/SOEN-6611} \\
+		By Team M
+		\thispagestyle{empty} 
+	\end{titlepage}
+	
+	\newpage 
+	\setcounter{page}{0}
+	\pagenumbering{gobble}
+	\tableofcontents
+	\clearpage
+	
+	\pagenumbering{arabic}
+	
+
+	
+	\chapter{Introduction}
+
+	 There has been a growing recognition of the pivotal role that descriptive statistics play in data analysis. Descriptive statistics provide a quantitative framework for characterizing the features of a dataset. By employing measures of central tendency, frequency distributions, and variability, descriptive statistics offer valuable insights into the underlying structure and patterns within the data, laying the groundwork for further analysis and interpretation. In this context, we consider a random variable denoted as x, which draws values from a finite dataset {x1, x2, x3, ..., xn}, where each value carries an equal probability. Within this framework, we introduce the concepts of minimum (m) and maximum (M), representing the smallest and largest values in the dataset, respectively. Additionally, we identify the mode (o) as the value with the highest frequency. For measures of central location, we introduce the median (d), which represents the middle value when the dataset size is odd, and the arithmetic mean when it is even.
+	\section{System Information}
+	A key system is being developed as part of the development of the Logistics and Supply Chain 	Analytics Solution, known as "METRICSTICS," to conduct a thorough study of logistics and supply chain performance. This system will examine statistical analyses of logistical data with the goal of giving the logistics management team the tools they need to efficiently track trends in logistics operations over time. It will enable thorough examinations of historical records in the logistics and supply chain area, enabling well-informed decision-making based on the priceless insights gained. Professionals in logistics, such as Warehouse Manager, Logistics Managers, Inventory managers and Procurement Managers, make up the majority of "METRICSTICS"'s stakeholders and will gain the most from the insights and features this analytics solution provides.
+	
+	\section{Assumptions}
+	The project has the following assumptions:
+	\begin{enumerate}
+	\item \textbf{Random Variables and Data Set} 
+	\begin{itemize}
+		\item The system operates on random variables that can take values from a finite data set $x_1, x_2, x_3, \ldots, x_n$ with each value having the same probability.
+	\end{itemize}
+
+	\item \textbf{Probability Distribution:} 
+	\begin{itemize}
+	\item The probability distribution of the random variable is assumed to be uniform, as each value in the data set has the same probability.
+	\end{itemize}
+	
+	\item \textbf{Uniqueness of Minimum and Maximum:} 
+	\begin{itemize}
+		\item The probability distribution of the random variable is assumed to be uniform, as each value in the data set has the same probability.
+	\end{itemize}
+
+	\item \textbf{Uniqueness of Mode:} 
+	\begin{itemize}
+	\item The mode $o$ may not be unique. There can be multiple modes if multiple values occur with the highest frequency.
+	\end{itemize}
+	
+	\item \textbf{Calculation of Median for Even $n$:} 
+	\begin{itemize}
+		\item When the number of observations ($n$) is even, the median $d$ is calculated as the arithmetic mean of the two middle values.
+	\end{itemize}
+
+	\item \textbf{Calculation of Standard Deviation:} 
+	\begin{itemize}
+	\item The standard deviation ($\sigma$) is calculated based on the squared differences between each observation and the arithmetic mean.
+	\end{itemize}
+
+	\item \textbf{Accuracy of Data:} 
+	\begin{itemize}
+	\item It is assumed that the data provided to the system is accurate and free from errors.
+	\end{itemize}
+
+	\item \textbf{Input Data Source:} 
+	\begin{itemize}
+		\item The system can accept data from different sources, including real-world data from authoritative sources or artificially generated data from a random data generator.
+	\end{itemize}
+	\end{enumerate}
+	
+	\section{Constraints}
+	The project has some potential constraints:
+	\begin{enumerate}
+		
+	\item \textbf{Computational Resources:} 
+	\begin{itemize}
+		\item The system's performance may be limited by the available computational resources, such as processing power, memory, and storage.
+	\end{itemize}
+
+	\item \textbf{Input Data Quality:} 
+	\begin{itemize}
+		\item The accuracy and reliability of the descriptive statistics may be affected by the quality and integrity of the input data. Inaccurate or incomplete data may lead to unreliable results.
+	\end{itemize}
+
+	\item \textbf{Data Size:} 
+	\begin{itemize}
+		\item The system may face limitations in processing very large datasets, potentially leading to longer processing times or resource constraints.
+	\end{itemize}
+
+	\item \textbf{Statistical Assumptions:} 
+	\begin{itemize}
+		\item The accuracy of the descriptive statistics relies on the validity of certain statistical assumptions, such as the assumption of a uniform probability distribution for the data.
+	\end{itemize}
+	
+	\item \textbf{Output Interpretation:} 
+	\begin{itemize}
+		\item Users must be able to interpret the descriptive statistics correctly to derive meaningful insights from the results. Inadequate understanding may lead to misinterpretation.
+	\end{itemize}
+
+	\end{enumerate}
+	
+	\chapter{Problem 1: Goal-Question-Metric}
+	\input{problem1}
+	
+	\chapter{Problem 2: Use Case Model}
+	\input{problem2}
+	
+	\chapter{Team Contribution}
+	\section{Team Members and Roles}
+	\begin{center}
+		\begin{tabular}{|l|p{0.4\linewidth}|l|}
+			\hline
+			\textbf{Team Member} & \textbf{Roles}\\
+			\hline
+			Sharanyu Pillai (40227794) & 2 Metric Questions, Actor Definitions and Use Case Descriptions, Introduction\\
+			\hline
+			Arshiya Sahni (40202614) & 2 Metric Questions, Actor Definitions and Use Case Descriptions, Use Case Diagram\\
+			\hline
+			Anitha Ramakrishnan (40231724) & 2 Metric Questions, Actor Definitions and Use Case Descriptions\\
+			\hline
+			Vinay Sahrawat (40220936) & 2 Metric Questions, Actor Definitions and Use Case Descriptions\\
+			\hline
+			Wei Qi (40198872) & 2 Metric Questions, Actor Definitions and Use Case Descriptions, Latex Compilation \\
+			\hline
+		\end{tabular}
+	\end{center}
+
+	\chapter{Reference}
+	\begin{enumerate}
+	\item https://www.leadingagile.com/2017/05/agile-metrics-gqm-approach
+	\item https://www.geeksforgeeks.org/software-measurement-and-metrics
+	\item https://www.wrike.com/project-management-guide/faq/what-is-smart-in-project-management/ 
+	
+	\end{enumerate}
+	
+	
+
+\end{document}
