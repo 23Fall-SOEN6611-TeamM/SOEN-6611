@@ -32,8 +32,12 @@ class EnterDataDialog(simpledialog.Dialog):
         except ValueError:
             messagebox.showwarning("Invalid Input", "Data must be a list of numbers separated by commas.")
             return 0
+
+        # Check if the numbers are within the range of 0 to 1000
+        if any(num < 0 or num > 1000 for num in self.result):
+            messagebox.showwarning("Invalid Input", "Numbers must be between 0 and 1000.")
+            return 0
+
         return 1
 
-    def apply(self):
-        # Result has already been set in validate method
-        pass
+
