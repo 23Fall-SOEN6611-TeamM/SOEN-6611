@@ -104,8 +104,17 @@ class MetricsticsApp(tk.Tk):
                                            "The CSV file contains invalid data. Please make sure all values are "
                                            "integers or floats.")
                     return
-                data_values = data[0].astype(str).tolist()
+
+                data_values = data[0].astype(float).tolist()
+
+                if any(num < 0 or num > 1000 for num in data_values):
+                    messagebox.showwarning("Invalid Data",
+                                           "The CSV file contains numbers outside the valid range of 0 to 1000. "
+                                           "Please make sure all values are within this range.")
+                    return
+
                 self.left_frame.set_data(data_values)
 
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to load the CSV file: {str(e)}")
+
