@@ -6,7 +6,7 @@ class Calculator:
         if not data_string:
             print("Error: Input data string is empty.")
             return
-        data_list = data_string.split(',')
+        data_list = data_string.split(",")
         try:
             self.data = [float(x.strip()) for x in data_list if x.strip()]
         except ValueError as e:
@@ -90,7 +90,9 @@ class Calculator:
         μ = self.mean()
         if μ is None:
             return None
-        return self.round_number(sum(self.absolute_value(x - μ) for x in self.data) / len(self.data), 2)
+        return self.round_number(
+            sum(self.absolute_value(x - μ) for x in self.data) / len(self.data), 2
+        )
 
     def standard_deviation(self, decimal_places=2):
         if not self.data:
@@ -100,7 +102,7 @@ class Calculator:
         if μ is None:
             return None
         variance = sum((x - μ) ** 2 for x in self.data) / len(self.data)
-        std_dev = variance ** 0.5
+        std_dev = variance**0.5
         return self.round_number(std_dev, decimal_places)
 
     def descriptive_statistics(self):
@@ -114,7 +116,7 @@ class Calculator:
             "Median": self.median(),
             "Mean": self.mean(),
             "Mean Absolute Deviation": self.mean_absolute_deviation(),
-            "Standard Deviation": self.standard_deviation()
+            "Standard Deviation": self.standard_deviation(),
         }
 
     def round_number(self, number, ndigits=None):
@@ -125,7 +127,7 @@ class Calculator:
 
         # Shift the decimal point to the right by ndigits
         # So we can work with the integer part for rounding
-        shift = 10 ** ndigits
+        shift = 10**ndigits
         temp = number * shift
 
         # Get the integer and the fractional part of the number

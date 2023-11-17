@@ -8,7 +8,7 @@ class LoginDialog(simpledialog.Dialog):
         self.username = ""
         self.password = ""
         self.authenticated = False
-        self.user_data = pd.read_excel('database/users.xlsx', sheet_name='Sheet1')
+        self.user_data = pd.read_excel("database/users.xlsx", sheet_name="Sheet1")
         super().__init__(parent, title)
 
     def body(self, master):
@@ -18,7 +18,12 @@ class LoginDialog(simpledialog.Dialog):
         top_frame = tk.Frame(master)
         top_frame.pack(side="top", fill="both", expand=True)
 
-        tk.Label(top_frame, text="Welcome To METRICSTICS", fg='#B22222', font=("Lucida Handwriting", 13, "bold")).pack(pady=20)
+        tk.Label(
+            top_frame,
+            text="Welcome To METRICSTICS",
+            fg="#B22222",
+            font=("Lucida Handwriting", 13, "bold"),
+        ).pack(pady=20)
 
         input_frame = tk.Frame(master)
         input_frame.pack(side="top", fill="both", expand=True, padx=20, pady=5)
@@ -32,15 +37,18 @@ class LoginDialog(simpledialog.Dialog):
         self.e1.grid(row=0, column=1, pady=5)
         self.e2.grid(row=1, column=1, pady=5)
 
-        master.bind('<Return>', lambda event: self.ok())
+        master.bind("<Return>", lambda event: self.ok())
 
         return self.e1
 
     def apply(self):
         self.username = self.e1.get()
         self.password = self.e2.get()
-        self.user_data['Password'] = self.user_data['Password'].astype(str)
-        if ((self.user_data['Username'] == self.username) & (self.user_data['Password'] == self.password)).any():
+        self.user_data["Password"] = self.user_data["Password"].astype(str)
+        if (
+            (self.user_data["Username"] == self.username)
+            & (self.user_data["Password"] == self.password)
+        ).any():
             self.authenticated = True
         else:
             messagebox.showerror("Error", "Invalid username or password")

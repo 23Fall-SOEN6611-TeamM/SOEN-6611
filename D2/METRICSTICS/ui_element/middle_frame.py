@@ -7,9 +7,10 @@ import os
 import datetime
 import time
 
+
 class MiddleFrame(tk.Frame):
     def __init__(self, parent, app, calculator, right_frame):
-        super().__init__(parent, bg='LightBlue')
+        super().__init__(parent, bg="LightBlue")
         self.app = app
         self.calculator = calculator
         self.right_frame = right_frame
@@ -19,43 +20,77 @@ class MiddleFrame(tk.Frame):
         self.task_running = False
 
         orange_line = tk.Frame(self, bg="#B22222", height=5)
-        orange_line.pack(fill='x', side='top')
+        orange_line.pack(fill="x", side="top")
 
-        self.calculate_button = tk.Button(self, text="Analyze", command=self.calculate,
-                                          width=18, font=('Arial', 15, 'bold'), bg='#B22222', fg='white')
+        self.calculate_button = tk.Button(
+            self,
+            text="Analyze",
+            command=self.calculate,
+            width=18,
+            font=("Arial", 15, "bold"),
+            bg="#B22222",
+            fg="white",
+        )
         self.calculate_button.pack(pady=10)
 
-        self.graph_label = tk.Label(self, text="Chart / Graph:", anchor='w', font=('Arial', 9, 'bold'), bg='LightBlue')
-        self.graph_label.pack(fill='x')
+        self.graph_label = tk.Label(
+            self,
+            text="Chart / Graph:",
+            anchor="w",
+            font=("Arial", 9, "bold"),
+            bg="LightBlue",
+        )
+        self.graph_label.pack(fill="x")
 
         self.selected_graph_type = tk.StringVar(value="Bar Chart")
 
-        self.graph_frame = tk.Frame(self, bg='LightBlue')
+        self.graph_frame = tk.Frame(self, bg="LightBlue")
         self.graph_frame.pack()
 
-        self.graph_types = ["Bar Chart", "Box Plot", "Histogram", "Dot Plot", "Line Chart", "Violin Plot"]
+        self.graph_types = [
+            "Bar Chart",
+            "Box Plot",
+            "Histogram",
+            "Dot Plot",
+            "Line Chart",
+            "Violin Plot",
+        ]
         for i, graph_type in enumerate(self.graph_types):
             row = i // 3
             column = i % 3
-            radio = tk.Radiobutton(self.graph_frame, text=graph_type, variable=self.selected_graph_type,
-                                   value=graph_type, bg='LightBlue')
-            radio.grid(row=row, column=column, sticky='w')
+            radio = tk.Radiobutton(
+                self.graph_frame,
+                text=graph_type,
+                variable=self.selected_graph_type,
+                value=graph_type,
+                bg="LightBlue",
+            )
+            radio.grid(row=row, column=column, sticky="w")
 
-        self.results_frame = tk.Frame(self, bg='LightBlue')
-        self.results_frame.pack(fill='both', expand=True)
+        self.results_frame = tk.Frame(self, bg="LightBlue")
+        self.results_frame.pack(fill="both", expand=True)
 
-        self.results_label = tk.Label(self.results_frame, text="Results:", font=('Arial', 9, 'bold'),
-                                      anchor='w', bg='LightBlue')
-        self.results_label.pack(side='top', pady=(10, 0), anchor='w')
+        self.results_label = tk.Label(
+            self.results_frame,
+            text="Results:",
+            font=("Arial", 9, "bold"),
+            anchor="w",
+            bg="LightBlue",
+        )
+        self.results_label.pack(side="top", pady=(10, 0), anchor="w")
 
-        self.results_text = tk.Text(self.results_frame, height=20, wrap='word', state=tk.DISABLED, bg='#f0f0f0')
-        self.results_text.pack(side='left', pady=(0, 10), fill='both', expand=True)
+        self.results_text = tk.Text(
+            self.results_frame, height=20, wrap="word", state=tk.DISABLED, bg="#f0f0f0"
+        )
+        self.results_text.pack(side="left", pady=(0, 10), fill="both", expand=True)
 
-        self.bg_image = PhotoImage(file='images/math.png')
+        self.bg_image = PhotoImage(file="images/math.png")
         self.results_text.image_create(tk.END, image=self.bg_image)
-        self.results_scroll = tk.Scrollbar(self.results_frame, orient='vertical', command=self.results_text.yview)
+        self.results_scroll = tk.Scrollbar(
+            self.results_frame, orient="vertical", command=self.results_text.yview
+        )
         self.results_text.config(yscrollcommand=self.results_scroll.set)
-        self.results_scroll.pack(side='left', fill='y')
+        self.results_scroll.pack(side="left", fill="y")
 
     def calculate(self):
         if self.task_running:
@@ -64,24 +99,30 @@ class MiddleFrame(tk.Frame):
         threading.Thread(target=self.calculate_in_thread).start()
 
     def show_notification(self):
-        messagebox.showinfo("Notification",
-                            "A/Some task(s) is(are) currently running. You still can analyze current data, "
-                            "but the page will fresh and show the results based on the job queue, "
-                            "you can check all the results from Tool -> Load Pre-data.")
+        messagebox.showinfo(
+            "Notification",
+            "A/Some task(s) is(are) currently running. You still can analyze current data, "
+            "but the page will fresh and show the results based on the job queue, "
+            "you can check all the results from Tool -> Load Pre-data.",
+        )
 
     def calculate_in_thread(self):
         self.task_running = True
         data = [item[1] for item in self.app.left_frame.get_data() if item[1]]
         if not data:
-            self.after(0, lambda: tk.messagebox.showerror("Calculation Error",
-                                                          "No data available. Please enter data first."))
+            self.after(
+                0,
+                lambda: tk.messagebox.showerror(
+                    "Calculation Error", "No data available. Please enter data first."
+                ),
+            )
             self.task_running = False
             return
 
         try:
             # time.sleep(8)
             data = [float(item) for item in data]
-            data_string = ','.join(map(str, data))
+            data_string = ",".join(map(str, data))
             self.calculator.input_data(data_string)
             results = self.calculator.descriptive_statistics()
 
@@ -99,8 +140,12 @@ class MiddleFrame(tk.Frame):
                 self.update_queue.put((data, generate_graphs_with_data))
 
         except ValueError as e:
-            self.after(0, lambda: tk.messagebox.showerror("Calculation Error",
-                                                          f"Error converting data to float: {str(e)}"))
+            self.after(
+                0,
+                lambda: tk.messagebox.showerror(
+                    "Calculation Error", f"Error converting data to float: {str(e)}"
+                ),
+            )
         except Exception as e:
             self.after(0, lambda error=e: self.show_error_msg(error))
         finally:
@@ -128,7 +173,7 @@ class MiddleFrame(tk.Frame):
             return
         self.last_saved_data = data
 
-        database_folder = 'database'
+        database_folder = "database"
         if not os.path.exists(database_folder):
             os.makedirs(database_folder)
 
@@ -147,11 +192,13 @@ class MiddleFrame(tk.Frame):
             filename = f"{self.app.username}_{now}_{counter}.xlsx"
             file_path = os.path.join(user_folder, filename)
             counter += 1
-        with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-            pd.Series(data, name='Data').to_frame().to_excel(writer, sheet_name='Data', index=False)
+        with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
+            pd.Series(data, name="Data").to_frame().to_excel(
+                writer, sheet_name="Data", index=False
+            )
 
             df = pd.DataFrame(list(results.items()), columns=["Statistic", "Value"])
-            df.to_excel(writer, sheet_name='Results', index=False)
+            df.to_excel(writer, sheet_name="Results", index=False)
         # print(f"Results and data saved to {file_path}")
 
     def generate_graphs(self, data, selected_graph, stats):
@@ -195,4 +242,3 @@ class MiddleFrame(tk.Frame):
             results_data.append((key, value))
 
         return results_data
-
