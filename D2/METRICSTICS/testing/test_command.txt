@@ -1,0 +1,1 @@
+pytest -rPx -v --tb=long >> metricstics_test_report.txt --html=metricstics_test_report.html
