@@ -266,8 +266,6 @@ def test_median_valid_data_odd():
     calculator = Calculator()
     calculator.input_data(data)
     sorted_data = sorted(map(float, data.split(", ")))
-    calculated_median = calculator.median()
-    print("Calculated Median:", calculated_median)
     assert calculator.median() == round(sorted_data[len(sorted_data) // 2], 2)
 
 

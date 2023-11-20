@@ -97,3 +97,98 @@ _______________________ test_standard_deviation_no_data ________________________
 Error: No data available. Please input data first.
 - Generated html report: file:///Users/sharanyu/Documents/GitHub/SOEN-6611/D2/METRICSTICS/metricstics_test_report.html -
 ========================= 2 failed, 26 passed in 0.14s =========================
+============================= test session starts ==============================
+platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /opt/homebrew/opt/python@3.10/bin/python3.10
+cachedir: .pytest_cache
+metadata: {'Python': '3.10.13', 'Platform': 'macOS-14.1.1-arm64-arm-64bit', 'Packages': {'pytest': '7.4.3', 'pluggy': '1.3.0'}, 'Plugins': {'anyio': '3.6.2', 'print': '1.0.0', 'html': '4.1.1', 'metadata': '3.0.0'}}
+rootdir: /Users/sharanyu/Documents/GitHub/SOEN-6611/D2/METRICSTICS
+plugins: anyio-3.6.2, print-1.0.0, html-4.1.1, metadata-3.0.0
+collecting ... collected 28 items
+
+testing/test_calculator.py::test_minimum_valid_data PASSED               [  3%]
+testing/test_calculator.py::test_minimum_no_data PASSED                  [  7%]
+testing/test_calculator.py::test_minimum_negative_values PASSED          [ 10%]
+testing/test_calculator.py::test_minimum_duplicate_values PASSED         [ 14%]
+testing/test_calculator.py::test_maximum_valid_data PASSED               [ 17%]
+testing/test_calculator.py::test_maximum_no_data PASSED                  [ 21%]
+testing/test_calculator.py::test_maximum_negative_values PASSED          [ 25%]
+testing/test_calculator.py::test_maximum_duplicate_values PASSED         [ 28%]
+testing/test_calculator.py::test_mode_valid_data_single_mode PASSED      [ 32%]
+testing/test_calculator.py::test_mode_valid_data_multiple_modes PASSED   [ 35%]
+testing/test_calculator.py::test_mode_no_data PASSED                     [ 39%]
+testing/test_calculator.py::test_mode_all_unique_values FAILED           [ 42%]
+testing/test_calculator.py::test_median_valid_data_odd FAILED            [ 46%]
+testing/test_calculator.py::test_median_valid_data_even PASSED           [ 50%]
+testing/test_calculator.py::test_median_no_data PASSED                   [ 53%]
+testing/test_calculator.py::test_median_duplicate_values PASSED          [ 57%]
+testing/test_calculator.py::test_mean_valid_data PASSED                  [ 60%]
+testing/test_calculator.py::test_mean_no_data PASSED                     [ 64%]
+testing/test_calculator.py::test_mean_negative_values PASSED             [ 67%]
+testing/test_calculator.py::test_mean_decimal_values PASSED              [ 71%]
+testing/test_calculator.py::test_mean_absolute_deviation_valid_data PASSED [ 75%]
+testing/test_calculator.py::test_mean_absolute_deviation_no_data PASSED  [ 78%]
+testing/test_calculator.py::test_mean_absolute_deviation_negative_values PASSED [ 82%]
+testing/test_calculator.py::test_mean_absolute_deviation_decimal_values PASSED [ 85%]
+testing/test_calculator.py::test_standard_deviation_valid_data PASSED    [ 89%]
+testing/test_calculator.py::test_standard_deviation_no_data PASSED       [ 92%]
+testing/test_calculator.py::test_standard_deviation_negative_values PASSED [ 96%]
+testing/test_calculator.py::test_standard_deviation_decimal_values PASSED [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_mode_all_unique_values __________________________
+
+    def test_mode_all_unique_values():
+        data = generate_random_data(1000)
+        calculator = Calculator()
+        calculator.input_data(data)
+>       assert calculator.mode() == sorted(list(set(map(float, data.split(", ")))))
+E       AssertionError: assert [351.45907676...75298978, ...] == [0.1524165241...74415714, ...]
+E         At index 0 diff: 351.45907676256417 != 0.15241652418951368
+E         Full diff:
+E           [
+E         +  351.45907676256417,
+E         +  848.0106874813937,
+E         +  468.31576645684225,
+E         +  892.7411929584151,...
+E         
+E         ...Full output truncated (1980 lines hidden), use '-vv' to show
+
+testing/test_calculator.py:260: AssertionError
+__________________________ test_median_valid_data_odd __________________________
+
+    def test_median_valid_data_odd():
+        data = generate_random_data(1000)
+        calculator = Calculator()
+        calculator.input_data(data)
+        sorted_data = sorted(map(float, data.split(", ")))
+>       assert calculator.median() == round(sorted_data[len(sorted_data) // 2], 2)
+E       assert 465.04 == 465.15
+E        +  where 465.04 = <bound method Calculator.median of <statistic_tool.calculator.Calculator object at 0x104beaf50>>()
+E        +    where <bound method Calculator.median of <statistic_tool.calculator.Calculator object at 0x104beaf50>> = <statistic_tool.calculator.Calculator object at 0x104beaf50>.median
+E        +  and   465.15 = round(465.1465017961565, 2)
+
+testing/test_calculator.py:269: AssertionError
+==================================== PASSES ====================================
+_____________________________ test_minimum_no_data _____________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_____________________________ test_maximum_no_data _____________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+______________________________ test_mode_no_data _______________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_____________________________ test_median_no_data ______________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+______________________________ test_mean_no_data _______________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_____________________ test_mean_absolute_deviation_no_data _____________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_______________________ test_standard_deviation_no_data ________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+- Generated html report: file:///Users/sharanyu/Documents/GitHub/SOEN-6611/D2/METRICSTICS/metricstics_test_report.html -
+========================= 2 failed, 26 passed in 0.15s =========================
