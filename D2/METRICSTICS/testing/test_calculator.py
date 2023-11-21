@@ -94,10 +94,9 @@ def test_mode_all_unique_values():
     expected_mode = sorted(list(set(map(float, data.split(", ")))))
     assert sorted(calculator.mode()) == expected_mode
 
-
 # data count - 9999
 def test_median_valid_data_even():
-    data = generate_random_data(9999) + ", 1000"
+    data = generate_random_data(9999) + ", 10000"
     calculator = Calculator()
     calculator.input_data(data)
     sorted_data = sorted(map(float, data.split(", ")))
