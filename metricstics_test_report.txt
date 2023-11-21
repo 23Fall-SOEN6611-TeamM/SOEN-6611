@@ -1,0 +1,60 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /opt/homebrew/opt/python@3.10/bin/python3.10
+cachedir: .pytest_cache
+metadata: {'Python': '3.10.13', 'Platform': 'macOS-14.1.1-arm64-arm-64bit', 'Packages': {'pytest': '7.4.3', 'pluggy': '1.3.0'}, 'Plugins': {'anyio': '3.6.2', 'print': '1.0.0', 'html': '4.1.1', 'metadata': '3.0.0'}}
+rootdir: /Users/sharanyu/Documents/GitHub/SOEN-6611
+plugins: anyio-3.6.2, print-1.0.0, html-4.1.1, metadata-3.0.0
+collecting ... collected 27 items
+
+D2/METRICSTICS/testing/test_calculator.py::test_minimum_valid_data PASSED [  3%]
+D2/METRICSTICS/testing/test_calculator.py::test_minimum_no_data PASSED   [  7%]
+D2/METRICSTICS/testing/test_calculator.py::test_minimum_negative_values PASSED [ 11%]
+D2/METRICSTICS/testing/test_calculator.py::test_minimum_duplicate_values PASSED [ 14%]
+D2/METRICSTICS/testing/test_calculator.py::test_maximum_valid_data PASSED [ 18%]
+D2/METRICSTICS/testing/test_calculator.py::test_maximum_no_data PASSED   [ 22%]
+D2/METRICSTICS/testing/test_calculator.py::test_maximum_negative_values PASSED [ 25%]
+D2/METRICSTICS/testing/test_calculator.py::test_maximum_duplicate_values PASSED [ 29%]
+D2/METRICSTICS/testing/test_calculator.py::test_mode_valid_data_single_mode PASSED [ 33%]
+D2/METRICSTICS/testing/test_calculator.py::test_mode_valid_data_multiple_modes PASSED [ 37%]
+D2/METRICSTICS/testing/test_calculator.py::test_mode_no_data PASSED      [ 40%]
+D2/METRICSTICS/testing/test_calculator.py::test_mode_all_unique_values PASSED [ 44%]
+D2/METRICSTICS/testing/test_calculator.py::test_median_valid_data_even PASSED [ 48%]
+D2/METRICSTICS/testing/test_calculator.py::test_median_no_data PASSED    [ 51%]
+D2/METRICSTICS/testing/test_calculator.py::test_median_duplicate_values PASSED [ 55%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_valid_data PASSED   [ 59%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_no_data PASSED      [ 62%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_negative_values PASSED [ 66%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_decimal_values PASSED [ 70%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_absolute_deviation_valid_data PASSED [ 74%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_absolute_deviation_no_data PASSED [ 77%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_absolute_deviation_negative_values PASSED [ 81%]
+D2/METRICSTICS/testing/test_calculator.py::test_mean_absolute_deviation_decimal_values PASSED [ 85%]
+D2/METRICSTICS/testing/test_calculator.py::test_standard_deviation_valid_data PASSED [ 88%]
+D2/METRICSTICS/testing/test_calculator.py::test_standard_deviation_no_data PASSED [ 92%]
+D2/METRICSTICS/testing/test_calculator.py::test_standard_deviation_negative_values PASSED [ 96%]
+D2/METRICSTICS/testing/test_calculator.py::test_standard_deviation_decimal_values PASSED [100%]
+
+==================================== PASSES ====================================
+_____________________________ test_minimum_no_data _____________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_____________________________ test_maximum_no_data _____________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+______________________________ test_mode_no_data _______________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_____________________________ test_median_no_data ______________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+______________________________ test_mean_no_data _______________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_____________________ test_mean_absolute_deviation_no_data _____________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+_______________________ test_standard_deviation_no_data ________________________
+----------------------------- Captured stdout call -----------------------------
+Error: No data available. Please input data first.
+- Generated html report: file:///Users/sharanyu/Documents/GitHub/SOEN-6611/metricstics_test_report.html -
+============================== 27 passed in 1.30s ==============================
