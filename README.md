@@ -47,10 +47,9 @@ To utilize METRICSTICS Application, follow these steps:
     ```
 
 ### Step 3: Run the Application
-1. Rnn below command to inintalldependencies
-   ```bash
    pip install -r requirements.txt
-   ```bash
+1. Rnn command "" to inintalldependencies
+
 
 ### Step 4: Run the Application
 
