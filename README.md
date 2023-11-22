@@ -46,9 +46,8 @@ To utilize METRICSTICS Application, follow these steps:
     cd D2/METRICSTICS
     ```
 
-### Step 3: Run the Application
-   pip install -r requirements.txt
-1. Rnn command "" to inintalldependencies
+### Step 3: Install the dependencies
+Rnn command "pip install -r requirements.txt" to inintall dependencies
 
 
 ### Step 4: Run the Application
