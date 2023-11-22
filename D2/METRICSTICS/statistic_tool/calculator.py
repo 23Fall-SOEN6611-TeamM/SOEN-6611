@@ -161,8 +161,8 @@ class Calculator:
             greater = [x for x in data[1:] if x >= pivot]
             return self.quicksort(less) + [pivot] + self.quicksort(greater)
 
-    def my_sorted(self):
+    def my_sorted(self, data):
         if not self.data:
             print("Error: No data available. Please input data first.")
             return None
-        return self.quicksort(self.data)
+        return self.quicksort(data)
