@@ -1,5 +1,5 @@
 # SOEN-6611
-# METRICSTICS: Descriptive Statistics Toolkit
+# METRICSTICS APPLICATION
 
 ## Introduction
 
@@ -22,7 +22,6 @@ The METRICSTICS project aims to create an interconnected set of artifacts design
 ## Getting Started
 
 To utilize METRICSTICS Application, follow these steps:
-# METRICSTICS: Descriptive Statistics Toolkit
 
 ## Getting Started
 
