@@ -1,0 +1,2208 @@
+\documentclass[english,12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{nameref}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{xcolor}
+
+\lstdefinestyle{mystyle}{
+	commentstyle=\color{gray},
+	keywordstyle=\color{blue},
+	numberstyle=\tiny\color{gray},
+	stringstyle=\color{purple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+\lstset{style=mystyle}
+\renewcommand{\lstlistingname}{Python Code}
+\geometry{
+	left=1in,
+	right=1in,
+	top=1in,
+	bottom=1in
+}
+\renewcommand{\arraystretch}{1.5}
+
+\renewcommand{\theequation}{Equation \arabic{equation}}
+
+
+\makeatletter
+\def\@makechapterhead#1{
+	\vspace*{0\p@}
+	{\parindent \z@ \raggedright \normalfont
+		\interlinepenalty\@M
+		\Huge \bfseries #1\par\nobreak
+		\vskip 30\p@
+}}
+
+
+\begin{document}
+	\setstretch{1.5}
+	\begin{titlepage}
+		\centering
+		\Huge
+		\textbf{PROJECT REPORT}\\
+		\vspace{1cm}
+		\textbf{METRICSTICS}\\
+		\textbf{(DELIVERABLE - 2)}\\
+		\vspace{1.5cm}
+		\Large
+		\textbf{Prepared By}\\
+		\vspace{0.5cm}
+		Sharanyu Pillai\\
+		Wei Qi\\
+		Anitha Ramakrishnan\\
+		Arshiya Sahni\\
+		Vinay Sahrawat\\
+		\vspace{1.5cm}
+		\large
+		\textbf{Under the Guidance of}\\
+		Prof. Pankaj Kamthan \\
+		\textbf{Submitted at}\\
+		CONCORDIA UNIVERSITY\\
+		\centering
+		\includegraphics[width=8cm]{concordia.jpg}
+		\vfill
+		Github:\\
+		\url{https://github.com/23Fall-SOEN6611-TeamM/SOEN-6611} \\
+		By Team M
+		\thispagestyle{empty} 
+	\end{titlepage}
+	
+	\newpage 
+	\setcounter{page}{0}
+	\pagenumbering{gobble}
+	\tableofcontents
+	\clearpage
+	
+	\pagenumbering{arabic}
+	
+	
+	\chapter*{List of Symbols and Abbreviations}\addcontentsline{toc}{chapter}{List of Symbols and Abbreviations}
+	\noindent\begin{tabular}{ll}
+		% $\mathbb{R}$ & The set of real numbers (example)\\
+		% $\|\cdot\|_F$ & Frobenius norm (example)\\
+		GQM & Goal Question Metric\\
+		UC & Use Case\\
+		SLOC & Source Line of Codes\\
+		SLOC(L) & Logical SLOC\\
+		UCP & Use Case Point\\
+		PF & Productivity Factor\\
+		UUCP & Unadjusted Use Case Points\\
+		TCF & Technical Complexity Factor\\
+		Ecf & Environmental Complexity Factor\\
+		UAW & Unadjusted Actor Weight\\
+		UUCW & Unadjusted Use Case Weight\\
+		WTi & Technical Complexity Factor Weight\\
+		Fi & Perceived Impact Weight\\
+		WEi & Environmental Complexity Factor Weight
+		
+		
+	\end{tabular}
+	\listoffigures\addcontentsline{toc}{chapter}{List of Figures}
+	\listoftables\addcontentsline{toc}{chapter}{List of Tables}
+	
+	\chapter{Introduction}
+	
+	Understanding the intricacies of software project estimation and execution is pivotal in the field of software engineering. The delivery-2 offers a comprehensive analysis of such processes through the lens of the METRICSTICS project—a statistical analysis system. By juxtaposing the theoretical estimations of effort via the Use Case Points approach and Basic COCOMO 81 against practical implementation challenges in Python, the paper investigates the nuances of software metrics, design quality, and code complexity. The subsequent correlation analysis between various metrics further enriches the discourse on software project predictability and performance. This exploration aims to serve as a detailed narrative on the multifaceted nature of building a robust software system, from conception to completion.
+	\section{System Information}
+	The field of data analysis fundamentally relies on the ability to succinctly describe and interpret large datasets. Descriptive statistics are the tools through which this clarity is achieved, allowing complex data to be expressed through measures of central tendency, frequency, and variability. Central to this domain is the METRICSTICS system, a sophisticated framework engineered for calculating essential statistical metrics. The system is adept at processing a random variable, \( x \), which encompasses a finite set of values \( x_1, x_2, x_3, \ldots, x_n \), each with an equal likelihood of occurrence. It is equipped to ascertain the minimum \( m \), maximum \( M \), mode \( o \), median \( d \), arithmetic mean \( \mu \), mean absolute deviation (MAD), and standard deviation \( \sigma \) of a dataset. These statistical measures are critical in summarizing and understanding data, irrespective of whether the data is derived from empirical sources or generated via simulation.
+	
+	
+	\section{Assumptions}
+	The project has the following assumptions:
+	\begin{enumerate}
+		
+		\item \textbf{Uniqueness of Minimum and Maximum:} 
+		\begin{itemize}
+			\item The probability distribution of the random variable is assumed to be uniform, as each value in the data set has the same probability.
+		\end{itemize}
+		
+		\item \textbf{Uniqueness of Mode:} 
+		\begin{itemize}
+			\item The mode $o$ may not be unique. There can be multiple modes if multiple values occur with the highest frequency.
+		\end{itemize}
+		
+		\item \textbf{Calculation of Median for Even $n$:} 
+		\begin{itemize}
+			\item When the number of observations ($n$) is even, the median $d$ is calculated as the arithmetic mean of the two middle values.
+		\end{itemize}
+		
+		\item \textbf{Calculation of Standard Deviation:} 
+		\begin{itemize}
+			\item The standard deviation ($\sigma$) is calculated based on the squared differences between each observation and the arithmetic mean.
+		\end{itemize}
+		
+		\item \textbf{Input Data Source:} 
+		\begin{itemize}
+			\item The system can accept data from different sources, including manual inputs, import from .csv files, and automatically generate data from system.
+		\end{itemize}
+	\end{enumerate}
+	
+	
+	\chapter{Problem 3: Use Case Points(UCP)}
+	\section{Project Estimation - UCP}
+	Effort estimation for the METRICSTICS system development is methodically determined by the Use Case Points (UCP) and  the Productivity Factor (PF).
+	\begin{equation}
+		Effort\ Estimate = UCP \times PF
+	\end{equation} 
+	UCP is a multi-faceted metric incorporating various dimensions of project complexity and it is computed as follows:
+	
+	\begin{equation}
+		UCP = UUCP \times TCF \times ECF
+	\end{equation}
+	
+	\begin{flushleft}
+		where \( TCF \) is the Technical Complexity Factor adjusting for technical difficulty, and \( ECF \) is the Environmental Complexity Factor considering the development environment. The foundational element of this calculation is the Unadjusted Use Case Points (UUCP), which is derived from:
+		
+		\begin{equation}
+			UUCP = UAW + UUCW
+		\end{equation}
+		
+		In this equation, \( UAW \) represents the Unadjusted Actor Weight, which assesses the complexity of the actors within the system, and \( UUCW \) denotes the Unadjusted Use Case Weight, which measures the functional requirements through the total number of transactional steps in all use case scenarios. Together, \( UAW \) and \( UUCW \) form the UUCP, providing a comprehensive measure of the project's functional size.
+	\end{flushleft}
+	
+	\begin{flushleft}
+		The detailed steps for calculating effort estimation are demonstrated below.
+	\end{flushleft}
+	
+	\subsection*{I. Calculate the Unadjusted Use Case Points (UUCP)}
+	
+	\begin{itemize}[leftmargin=*]
+		\item The system has one actor, the user who interacts with the system using graphical user interface. So, the actor is a complex actor with 3 points. The UAW matrix shown in Table 2.1. So,
+		
+		\begin{equation}
+			UAW = 3 \times 1 = 3
+		\end{equation}
+		
+		\begin{table}[htbp]
+			\centering
+			\begin{tabular}{@{}lccc@{}}
+				\toprule
+				Actor Type & Description & Weight & Actor Count \\ 
+				\midrule
+				A1 & Simple Actor & 1 & 0 \\ 
+				A2 & Average Actor & 2 & 0 \\ 
+				A3 & Complex Actor & 3 & 1 \\
+				\bottomrule
+			\end{tabular}
+			\caption{Actor Weight and Acount Determination}
+			\label{tab:actor_weight}
+		\end{table}
+		
+		\item The application has 8 classes, which is average user case with weight 10 based on the standards outlined in Table 2.2. So,
+		
+		\begin{equation}
+			UUCW = 10
+		\end{equation}
+		
+		\begin{table}[htbp]
+			\centering
+			\begin{tabular}{@{}llc@{}}
+				\toprule
+				Use Case Type & Description & Weight \\ 
+				\midrule
+				UC1 & Simple Use Case & 5 \\
+				UC2 & Average Use Case & 10 \\
+				UC3 & Complex Use Case & 15 \\
+				\bottomrule
+			\end{tabular}
+			\caption{Use Case Type Description and Weight}
+			\label{tab:use_case_weight}
+		\end{table}
+		
+		
+		\item The value of UUCP is
+		\begin{equation}
+			UUCP = UAW + UUCW = 3 + 10 = 13
+		\end{equation}
+	\end{itemize}
+	
+	\subsection*{II. The Technical Complexity Factor (TCF) is calculated using the formula:}
+	
+	\begin{equation}
+		TCF = C_{1} + \left[C_{2} \times \sum_{i=1}^{13} \left[W_{Ti} \times F_i\right]\right]
+	\end{equation}
+	
+	Where:
+	\( C_{1} \) is the constant 0.6,
+	\( C_{2} \) is the constant 0.01,
+	\( W_{Ti} \) is the Technical Complexity Weight for factor \( i \), and
+	\( F_i \) is the Perceived Impact Factor corresponding to each Technical Complexity Factor in the range of 0 to 5.\\
+	According to the assessment of the impact of each technical factor provided by team, table 2.3 presents the Technical Complexity Factor Weight for the system along with their corresponding Perceived Impact Factors(PIF). So, the value of TCF is
+	
+	\begin{equation}
+		\begin{aligned}
+			TCF &= 0.6 + \left(0.01 \times \left[(2 \times 0) + (1 \times 3) + (1 \times 3) + (1 \times 0) \right.\right. \\
+			&\left.\left. + (1 \times 5) + (0.5 \times 5) + (0.5 \times 5) + (2 \times 5) + (1 \times 5) \right.\right. \\
+			&\left.\left. + (1 \times 0) + (1 \times 0) + (1 \times 3) + (1 \times 0)\right]\right) \\
+			&= 0.6 + \left(0.01 \times 32.6\right) \\
+			&= 0.93
+		\end{aligned}
+	\end{equation}
+	
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{@{}llcc@{}}
+			\toprule
+			TCF Type & Description & Weight & PIF \\ 
+			\midrule
+			T1 & Distributed System & 2 & 0\\ 
+			T2 & Performance & 1 & 3\\ 
+			T3 & End User Efficiency & 1 & 3\\ 
+			T4 & Complex Internal Processing & 1 & 0\\ 
+			T5 & Reusability & 1 & 5\\ 
+			T6 & Easy to Install & 0.5 & 5\\ 
+			T7 & Easy to Use & 0.5 & 5\\ 
+			T8 & Portability & 2 & 5\\ 
+			T9 & Easy to Change & 1 & 5\\ 
+			T10 & Concurrency & 1 & 0\\ 
+			T11 & Special Security Features & 1 & 0\\ 
+			T12 & Provides Direct Access for Third Parties & 1 & 3\\ 
+			T13 & Special User Training Facilities are Required & 1 & 0\\ 
+			\bottomrule
+		\end{tabular}
+		\caption{TCF Type Description and Weight with Perceived Impact Factor}
+		\label{tab:tcf_table}
+	\end{table}
+	
+	
+	
+	\subsection*{III. The Environmental Complexity Factors (ECF) is calculated using the formula:}
+	\begin{equation}
+		ECF = C_{1} + \left[C_{2} \times \sum_{i=1}^{8} \left[W_{Ei} \times F_i\right]\right]
+	\end{equation}
+	Where:
+	\( C_{1} \) is the constant 1.4,
+	\( C_{2} \) is the constant -0.03,
+	\( W_{Ei} \) is the the Environmental Complexity Weight for factor \( i \), and
+	\( F_i \) is the Perceived Impact Factor corresponding to each Environmental Complexity Factor in the range of 0 to 5. \\
+	Based on the assessment of the impact of each environmental factor given by team, table 2.4 presents the Environmental Complexity Factor Weight for the system along with their corresponding Perceived Impact Factors(PIF). So, the value of ECF is
+	
+	\begin{equation}
+		\begin{aligned}
+			ECF &= 1.4 + \left(-0.03 \times \left[(1.5 \times 3) + (-1 	\times 3) + (0.5 \times 5) \right.\right. \\
+			&\left.\left. + (0.5 \times 3) + (1 \times 3) + (1 \times 0) 	\right. \right. \\
+			&\left.\left. + (-1 \times 5) + (2 \times 3)\right] \right) \\
+			&= 1.4 + \left(-0.03 \times 6.27\right) \\
+			&= 1.4 - 0.1881 \\
+			&= 1.21
+		\end{aligned}
+	\end{equation}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{@{}llcc@{}}
+			\toprule
+			ECF Type & Description & Weight & PIF \\ 
+			\midrule
+			E1 & Familiarity with Use Case Domain & 1.5 & 3 \\ 
+			E2 & Part-Time Workers & -1 & 3 \\ 
+			E3 & Analyst Capability & 0.5 & 5 \\ 
+			E4 & Application Experience & 0.5 & 3 \\ 
+			E5 & Object-Oriented Experience & 1 & 3 \\ 
+			E6 & Motivation & 1 & 0 \\ 
+			E7 & Difficult Programming Language & -1 & 5 \\ 
+			E8 & Stable Requirements & 2 & 3 \\ 
+			\bottomrule
+		\end{tabular}
+		\caption{ECF Type Description and Weight with Perceived Impact Factor}
+		\label{tab:ecf_table}
+	\end{table}
+	
+	
+	\subsection*{IV. Calculate the Use Case Points (UCP) using the formula:}
+	\begin{equation}
+		\begin{aligned}
+			UCP &= UUCP \times TCF \times ECF \\
+			&= 13 \times 0.93 \times 1.21 \\
+			&= 14.63 
+		\end{aligned}
+	\end{equation}
+	
+	
+	\subsection*{V. The initial estimate is 20 person-hours per use case point, so the final effort estimation is:}
+	\begin{equation}
+		\begin{aligned}
+			Effort\ Estimate&= UCP \times PF \\
+			&= 14.63 \times 20 \\
+			&= 292.60\ Hours
+		\end{aligned}
+	\end{equation}
+	
+	
+	\section{Project Estimation - COCOMO 81}
+	In COCOMO 81, the effort estimate for a software project is calculated using the following formula:
+	
+	\begin{equation}
+		\text{Effort} = a_1 \times (KLOC)^{b_1}
+	\end{equation}
+	
+	Where:
+	
+	\begin{itemize}
+		\item \text{Effort} represents the estimated number of person-months required to complete the project.
+		\item $KLOC$ stands for Kilo Lines of Code.
+		\item $a_1$ and $b_1$ are constants empirically determined based on project type and historical data.
+		
+	\end{itemize}
+	
+	The detailed steps for calculating effort estimation are demonstrated below.
+	
+	\begin{enumerate}[label=\Roman*., align=left, leftmargin=*]
+		\item The determination of the values of $a_1$ and $b_1$.
+		
+		Considering the project is a small team-sized software, according to COCOMO 81 model, the values of $a_1$ and $b_1$ are:
+		\begin{equation}
+			a_1 = 2.4, \ b_1 = 1.05
+		\end{equation}
+		
+		\item Calculate KLOC.
+		KLOC stands for "Kilo Lines of Code", the project's codebase has approximately 800 lines, so in KLOC, it would be:
+		
+		\begin{equation}
+			\text{KLOC} = \frac{\text{lines of code}}{1000} = \frac{800}{1000} = 0.8
+		\end{equation}
+		
+		
+		\item Finalize effort.
+		According above data, the final effort is:
+		\begin{equation}
+			\text{Effort} = 2.4 \times (0.8)^{1.05} = 1.89\ Person-months = 288.64\ Hours
+		\end{equation}
+		
+	\end{enumerate}
+	
+	
+	
+	\section{Estimation - UCP vs. COCOMO 81 vs. Actual Effort }
+	\subsection*{I. The summary of two types of effort estimation and actual effort.}
+	
+	\begin{itemize}[leftmargin=*]
+		\item \textbf{UCP Estimation:} The Use Case Points method estimated the project effort at 292.60 hours. This approach focuses on analyzing the project's use cases and adjusts for technical and environmental factors.
+		
+		\item \textbf{Basic COCOMO 81 Estimation:} The COCOMO 81 model estimated the effort to be 288.64 hours. This model is based on the size of the software measured in lines of code.
+		
+		\item \textbf{Actual Effort:} The actual effort expended was 260 hours. This is less than both the UCP and COCOMO estimates, which is due to team's higher productivity than expected and some underestimation of the team's capability.
+		
+		\item \textbf{Team Size and Work Hours:} With a five-person team working 15 hours per week, the total weekly capacity would be 75 hours. To complete 260 hours of work, the team spent slightly more than 3 weeks.
+	\end{itemize}
+	
+	\subsection*{II. Commentary on the Differences.}
+	\begin{itemize}[leftmargin=*]
+		\item Both the UCP and COCOMO 81 estimates are conservative compared to the actual effort, suggesting that the team was more efficient than estimated.
+		
+		\item The UCP estimate is slightly higher than the COCOMO estimate, which might indicate that the technical and environmental factors included in the UCP calculation had a higher impact than the scale factors of COCOMO.
+		
+		\item The actual effort can be affected by various factors not accounted for in the estimates, such as team experience, the actual code complexity versus what was estimated, tool usage, and project management efficiency.
+		
+		\item The productivity of the team and the actual hours worked can significantly influence the actual effort. For instance, during the development, some of our team members are highly experienced, the team completed the project with fewer hours than estimated.
+		
+		\item The COCOMO 81 model, being based on historical data, however, this is a new team and no previous data to reference, which could lead to a discrepancy in the estimate.
+	\end{itemize}
+	
+	
+	\chapter{Problem 4: METRICSTICS System}
+	\section{System Implementation}
+	\subsection*{I. Technology Stack and Programming Language}
+	
+	The implementation of the METRICSTICS system adopts the object-oriented programming paradigm and utilizes Python as the programming language. The implementation requirements stipulate that, apart from functions related to input and output, basic arithmetic, no native reuse mechanisms provided by the programming language or otherwise should be used. This necessitates the recursive implementation of certain primary functions, resulting in the creation of secondary functions. Furthermore, the implementation of a graphical user interface for METRICSTICS using Tkinter is a mandatory component as per the project's requirement.
+	
+	\subsection*{II. Core Features}
+	
+	The METRICSTICS system offers the following core features, and the detailed system functions show in the section of 'System Testing'.  
+	\begin{itemize}[leftmargin=*]
+		
+		\item \textbf{User Authentication and Login:} To ensure secure access to the system, users are required to authenticate themselves through a login process. Authentication helps protect sensitive data and ensures that only authorized individuals can utilize the system.	(Figure3.1: System Login Window)
+		
+		\item \textbf{Data Input Method Selection:} Authenticated users have the option to import data using the following methods: manual input, automatic system generation, or importing from a CSV file.(Figure3.2: System Main Window 1)
+		
+		\item \textbf{Data Input and Processing:} Users can input data, and the system displays the entered data. The system is also capable of automatically computing and generating results, including the minimum value ($m$), maximum value ($M$), mode ($o$), median ($d$), arithmetic mean ($\mu$), mean absolute deviation (MAD), and standard deviation ($\sigma$).(Figure3.3: System Main Window 2)
+		
+		\item \textbf{Data Visualization:} The system can generate relevant data visualizations to provide a more intuitive representation of data characteristics and distributions.(Figure3.3: System Main Window 2)
+		
+		\item \textbf{Historical Data Records:} Users have the capability to review past data results, facilitating the tracking of historical data analysis records.
+		
+		\item \textbf{Export Historical Data:} Users can export historical data to their local storage for future reference or sharing.
+		
+		\item \textbf{Data Validation and Exception Handling:} The system incorporates robust data validation and exception handling mechanisms. These mechanisms serve to verify the integrity of user input and provide checks against illegal or erroneous operations.
+	\end{itemize}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/login.jpg}
+		\caption{System Login Window}
+		\label{fig:System Login Window}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/main.jpg}
+		\caption{System Main Window 1}
+		\label{fig:System Main Window}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/data.jpg}
+		\caption{System Main Window 2}
+		\label{fig:System Main Window 2}
+	\end{figure}
+	
+	\subsection*{III. Implementation Process}
+	
+	The METRICSTICS system's implementation involves the creation of multiple classes, each serving a specific purpose in the software's functionality. In total, there are eight main classes (Figure 3.4: Code Structure) that collectively contribute to the system's capabilities:
+	\begin{itemize}[leftmargin=*]
+		
+		\item \textbf{Calculator Class:} The Calculator class is responsible for performing calculations based on user input. It encapsulates the logic for computing statistical metrics, including the minimum, maximum, mode, median, arithmetic mean ($\mu$), mean absolute deviation (MAD), and standard deviation ($\sigma$) of the dataset. This class forms the core of the data analysis functionality.
+		
+		\item \textbf{EnterDataDialog Class:} The EnterDataDialog class is designed to handle the manual input of data by users. It provides a user-friendly interface for entering data into the system. Users can input data directly, and this class ensures that the entered data is appropriately processed and passed to the Calculator for analysis.
+		
+		\item \textbf{GenerateDataDialog Class:} The GenerateDataDialog class plays a crucial role in generating synthetic data within the system. It offers users the option to create datasets automatically. This feature is valuable for scenarios where users want to analyze data quickly without the need for manual input.
+		
+		\item \textbf{LeftFrame Class:} The LeftFrame class is responsible for displaying user-inputted data. It provides a visual representation of the data entered by users, allowing them to review and verify their input. This class ensures that the data is presented in a clear and organized manner within the user interface.
+		
+		\item \textbf{LoginDialog Class:} The LoginDialog class serves as the user login interface. It enables users to authenticate and access the METRICSTICS system securely. Users are required to log in before they can utilize the system's data analysis capabilities.
+		
+		\item \textbf{MetricsticsApp Class:} The MetricsticsApp class functions as the primary user interface, serving as the main window of the METRICSTICS application. It orchestrates the display of three essential components: LeftFrame, MiddleFrame, and RightFrame. Users interact with the system through this class, initiating data analysis and visualization.
+		
+		\item \textbf{MiddleFrame Class:} The MiddleFrame class is responsible for displaying the calculated results obtained by the Calculator class. It ensures that users can conveniently view essential statistical metrics, providing a clear summary of the data's characteristics.
+		
+		\item \textbf{RightFrame Class:} The RightFrame class is dedicated to displaying data visualizations. It generates graphical representations of the dataset, aiding users in understanding the data's distribution and patterns visually.
+	\end{itemize}
+	These eight classes collectively form the foundation of the METRICSTICS system's implementation. The division of responsibilities among these classes allows for modularity, maintainability, and a seamless user experience. Users can interact with the system through the user interface provided by the MetricsticsApp class, input data via EnterDataDialog or GenerateDataDialog, and visualize results through RightFrame.
+	
+	This structured approach to class design ensures that the METRICSTICS system is organized, user-friendly, and capable of delivering accurate and meaningful data analysis results.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/code.jpg}
+		\caption{Code Structure}
+		\label{fig:Code Structure}
+	\end{figure}
+	
+	\section{Algorithm Implementation Of Calculator}
+	The requirement asks an implementation of METRICSTICS must not make use of any reuse mechanism (such as built-in functions, libraries, or APIs) provided natively by the	programming language or otherwise. This may lead to recursive implementation of	certain primary functions, the result of which would be secondary functions. So, instead of using built-in functions, our system use Calculator class to implement related statistic calculation. The descriptions of algorithms used and the rationale for selecting those algorithms for Calculator class presented as below.
+	
+	\subsection*{I. The function of minimum and maximum}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Iterates through the list once, keeping track of the smallest and largest values found.
+		\item Rationale: This is the most straightforward approach and requires only one pass through the data, ensuring O(n) time complexity.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Minimum method]
+		def minimum(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		min_value = self.data[0]
+		for value in self.data:
+		if value < min_value:
+		min_value = value
+		return self.round_number(min_value, 2)
+	\end{lstlisting}
+	
+	\begin{lstlisting}[language=Python, caption=Maximum method]
+		def maximum(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		max_value = self.data[0]
+		for value in self.data:
+		if value > max_value:
+		max_value = value
+		return self.round_number(max_value, 2)
+	\end{lstlisting}
+	
+	\subsection*{II. The function of mode}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Uses a dictionary to count occurrences of each number. Then iterates through the dictionary to find the most frequent number(s).
+		\item Rationale: Counting frequencies is a standard solution for finding the mode, which is efficient for data that fits in memory, typically O(n) time complexity.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Mode Method]
+		def mode(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		frequency = {}
+		for value in self.data:
+		if value in frequency:
+		frequency[value] += 1
+		else:
+		frequency[value] = 1
+		max_frequency = 0
+		mode_values = []
+		for key, value in frequency.items():
+		if value > max_frequency:
+		max_frequency = value
+		mode_values = [key]
+		elif value == max_frequency:
+		mode_values.append(key)
+		return mode_values
+	\end{lstlisting}
+	\subsection*{III. The function of median}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Sorts the data and then chooses the middle element (or the average of two middle elements).
+		\item Rationale: Sorting the data is a prerequisite to finding the median in an unordered list. The QuickSort algorithm is used for sorting because it's efficient on average, with time complexity O(n log n).
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Median Method]
+		def median(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		try:
+		sorted_data = self.my_sorted(self.data)
+		except Exception as e:
+		print("Error: An error occurred while sorting the data.")
+		print("Details:", e)
+		return None
+		n = len(sorted_data)
+		if n % 2 == 1:
+		return self.round_number(sorted_data[n // 2], 2)
+		else:
+		mid1 = sorted_data[(n - 1) // 2]
+		mid2 = sorted_data[n // 2]
+		return self.round_number((mid1 + mid2) / 2, 2)
+	\end{lstlisting}
+	
+	
+	\subsection*{IV. The function of mean}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Sums all the numbers and divides by the count of numbers.
+		\item Rationale: This is the direct mathematical definition of the mean and is the most efficient way to calculate it, with O(n) time complexity.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Mean Method]
+		def mean(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		try:
+		return self.round_number(sum(self.data) / len(self.data), 2)
+		except ZeroDivisionError:
+		print("Error: Division by zero occurred. This should not happen.")
+		return None
+	\end{lstlisting}
+	
+	
+	\subsection*{V. The function of mean\_absolute\_deviation}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: First computes the mean, then calculates the absolute value of the deviation of each number from the mean, and finally averages those deviations.
+		\item Rationale: This approach directly follows the mathematical definition of mean absolute deviation, with O(n) time complexity since it involves iterating through the data twice.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Mean Absolute Deviation Method]
+		def mean_absolute_deviation(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		mu = self.mean()
+		if mu is None:
+		return None
+		return self.round_number(sum(self.absolute_value(x - mu) for x in self.data) / len(self.data), 2)
+	\end{lstlisting}
+	
+	
+	\subsection*{VI. The function of standard\_deviation}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Computes the mean, then the variance by averaging the squared deviations, and finally takes the square root of the variance to find the standard deviation.
+		\item Rationale: This is the standard formula for standard deviation, which is computed efficiently in two passes through the data (O(n) complexity).
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Standard Deviation Method]
+		def standard_deviation(self, decimal_places=2):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		mu = self.mean()
+		if mu is None:
+		return None
+		variance = sum((x - mu) ** 2 for x in self.data) / len(self.data)
+		std_dev = variance ** 0.5
+		return self.round_number(std_dev, decimal_places)
+	\end{lstlisting}
+	
+	
+	\subsection*{VII. The function of round\_number}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Multiplies the number by a power of 10 to shift the decimal point, rounds the number, then shifts back.
+		\item Rationale: This simple algorithm accurately rounds numbers to the desired number of decimal places. It's a basic and direct way to round numbers.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Round Number Method]
+		def round_number(self, number, ndigits=None):
+		if ndigits is None:
+		ndigits = 0
+		elif ndigits < 0:
+		raise ValueError("ndigits must be non-negative")
+		
+		# Shift the decimal point to the right by ndigits
+		# So we can work with the integer part for rounding
+		shift = 10 ** ndigits
+		temp = number * shift
+		
+		# Get the integer and the fractional part of the number
+		integer_part = int(temp)
+		fractional_part = temp - integer_part
+		
+		# Check the fractional part to decide how to round the integer part
+		if fractional_part >= 0.5:
+		# Round up
+		integer_part += 1
+		
+		# Shift the decimal point back to the original position
+		return integer_part / shift
+	\end{lstlisting}
+	
+	
+	\subsection*{VIII. The function of absolute\_value}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Returns the number itself if it is positive or zero; otherwise, it returns the negation if the number is negative.
+		\item Rationale: This is the most efficient way to determine the absolute value with O(1) time complexity.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=Absolute Value Method]
+		def absolute_value(self, number):
+		"""
+		Return the absolute value of the number given.
+		"""
+		# Check if the number is negative
+		if number < 0:
+		# If the number is negative, make it positive by multiplying by -1
+		return -number
+		else:
+		# If the number is not negative, it is already positive, so return as is
+		return number
+	\end{lstlisting}
+	
+	
+	\subsection*{IX. The function of quicksort}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: Selects a pivot, partitions the list into elements less than and greater than the pivot, and then recursively sorts the partitions.
+		\item Rationale: QuickSort is chosen for its average-case efficiency (O(n log n)). It's a common choice for in-memory sorting due to its good performance on average and its relatively low memory overhead compared to merge sort.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=QuickSort Method]
+		def quicksort(self, data):
+		if len(data) <= 1:
+		return data
+		else:
+		pivot = data[0]
+		less = [x for x in data[1:] if x < pivot]
+		greater = [x for x in data[1:] if x >= pivot]
+		return self.quicksort(less) + [pivot] + self.quicksort(greater)
+	\end{lstlisting}
+	
+	
+	\subsection*{X. The function of my\_sorted}
+	\begin{itemize}[leftmargin=*]
+		\item Algorithm: This method is a wrapper that calls the quicksort method on the class's data.
+		\item Rationale: Provides a public interface to access the sorted data. It encapsulates the sorting functionality and allows the use of different sorting algorithms if needed.
+	\end{itemize}
+	\begin{lstlisting}[language=Python, caption=My Sorted Method]
+		def my_sorted(self):
+		if not self.data:
+		print("Error: No data available. Please input data first.")
+		return None
+		return self.quicksort(self.data)
+	\end{lstlisting}
+	
+	
+	\section{System Testing}
+	
+	\raggedright
+	In the process of validating the METRICSTICS system, we employ a combination of automated and manual testing methods. Automated testing primarily focuses on the core "Calculator" class to ensure precise statistical calculations, while manual testing covers the entire user journey, including positive and negative scenarios.
+	
+	Automated tests verify the accuracy of critical statistical metrics, such as minimum, maximum, mode, median, ($\sigma$). Tarithmetic mean ($\mu$), mean absolute deviation (MAD), and standard deviation his ensures the foundational correctness of our data analysis functionality.
+	
+	Manual testing evaluates the overall user experience, encompassing user interfaces, data input methods, data visualization, and interactions. It ensures the system's user-friendliness and error handling, allowing users to utilize METRICSTICS seamlessly.
+	
+	The following content provides detailed insights into our testing methodologies, test cases, and outcomes for a comprehensive view of METRICSTICS system validation.
+	
+	\subsection*{I. Automated Testing}
+	
+	Automated testing was conducted using the pytest tool, and the test results is present in Figure 3.5, the Figure 3.6 is automated testing code segment, the full code is available in the GitHub.
+	
+	To generate data we have developed a small data generator method so that we can generate data values as per the requirement. 
+	
+	We can mention the size of data we want as a parameter and call the function.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{images/data_generator_testing.png}
+		\caption{Test data generator}
+		\label{fig:Test data generator}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{images/test_cases_pytest.png}
+		\caption{Test case snippet}
+		\label{fig:Test case snippet}
+	\end{figure}
+	
+	A total of 27 Test cases were created to validate the statistical functions.
+	Brief description of each test case:
+	
+	\begin{enumerate}
+		\item test\_minimum\_valid\_data():  Tests the minimum function with 50,000 randomly generated values.
+		\item test\_minimum\_no\_data():  Checks the minimum function's behaviour with no data input.
+		\item test\_minimum\_negative\_values():  Tests the minimum function with 50,000 values, including negative numbers.
+		\item test\_minimum\_duplicate\_values():  Verifies the minimum function with 50,500 values, including duplicates.
+		\item test\_maximum\_valid\_data():  Tests the maximum function with 50,000 randomly generated values.
+		\item test\_maximum\_no\_data():  Checks the maximum function's behaviour with no data input.
+		\item test\_maximum\_negative\_values():  Tests the maximum function with 50,000 values, including negative numbers.
+		\item test\_maximum\_duplicate\_values():  Verifies the maximum function with 10,500 values, including duplicates.
+		\item test\_mode\_valid\_data\_single\_mode():  Tests the mode function with 20,005 values, ensuring a single mode.
+		\item test\_mode\_valid\_data\_multiple\_modes():  Tests the mode function with 20,006 values, ensuring multiple modes.
+		\item test\_mode\_no\_data():  Checks the mode function's behaviour with no data input.
+		\item test\_mode\_all\_unique\_values():  Tests the mode function with 20,000 unique values.
+		\item test\_median\_valid\_data\_even():  Tests the median function with an even number (10,000) of values.
+		\item test\_median\_no\_data():  Checks the median function's behaviour with no data input.
+		\item test\_median\_duplicate\_values():  Tests the median function with 50,500 values, including duplicates.
+		\item test\_mean\_valid\_data():  Tests the mean function with 50,000 randomly generated values.
+		\item test\_mean\_no\_data():  Checks the mean function's behaviour with no data input.
+		\item test\_mean\_negative\_values():  Tests the mean function with 100,000 values, including negative numbers.
+		\item test\_mean\_decimal\_values():  Tests the mean function with 100,000 decimal values.
+		\item test\_mean\_absolute\_deviation\_valid\_data():  Tests the mean absolute deviation function with 100,000 values.
+		\item test\_mean\_absolute\_deviation\_no\_data():  Checks the mean absolute deviation function's behaviour with no data input.
+		\item test\_mean\_absolute\_deviation\_negative\_values():  Tests the mean absolute deviation function with 100,000 values, including negative numbers.
+		\item test\_mean\_absolute\_deviation\_decimal\_values():  Tests the mean absolute deviation function with 100,000 decimal values.
+		\item test\_standard\_deviation\_valid\_data():  Tests the standard deviation function with 100,000 values.
+		\item test\_standard\_deviation\_no\_data():  Checks the standard deviation function's behaviour with no data input.
+		\item test\_standard\_deviation\_negative\_values():  Tests the standard deviation function with 100,000 values, including negative numbers.
+		\item test\_standard\_deviation\_decimal\_values():  Tests the standard deviation function with 100,000 decimal values.
+		
+	\end{enumerate}
+	
+	Results snippet:
+	
+	The testing script generates an HTML report of the test results and explains if any of the cases fail.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{images/test_report_html.png}
+		\caption{PyTest HTML Report}
+		\label{fig:PyTest HTML Report}
+	\end{figure}
+	
+	We can also check the results in the terminal.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{images/pytest_terminal_results.png}
+		\caption{PyTest Console Results}
+		\label{fig:PyTest Console Results}
+	\end{figure}
+	
+	\vspace{120pt}
+	
+	\subsection*{II. Manual testing}
+	
+	\begin{itemize}[leftmargin=*]
+		\item Positive User Journey
+		
+		\begin{longtable}{|c|p{3cm}|p{5cm}|c|}
+			\hline
+			\textbf{No.} & \textbf{Test Scenario} & \textbf{Test Steps and Expected Result} & \textbf{Result} \\
+			\hline
+			\endhead
+			
+			1 & Successful login & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Open the login window. \\
+				2. Enter the username "test". \\
+				3. Enter the password "test". \\
+				4. Click the Ok button.\\
+				
+				\vspace{8pt}
+				\textbf{Expected Result:}\\
+				
+				The main window displayed
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_login.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_main.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			2 & Enter data manually & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select the option of "Enter Data" from the menu of "Import Data". \\
+				2. Enter data. \\
+				3. Click Ok button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The data is loaded on the left frame
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_enterdata.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_enterdata1.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_enterdata2.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			
+			3 & Generate data & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select the option of "Generate Data" from the menu of "Import Data". \\
+				2. Enter the number of data. \\
+				3. Click Ok button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The data is loaded on the left frame
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_generatedata1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_generatedata2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_generatedata3.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			4 & Import data from cvs file & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select the option of "CVS File" from the menu of "Import Data". \\
+				2. Select cvs file from popup window. \\
+				3. Click Ok button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The data is loaded on the left frame
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_csv1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_csv2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/t_csv3.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			5 & Analyze Data(show Bar Chart,Box Plot, and Histogram) & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Import data. \\
+				2. Select Bar Chart. \\
+				3. Click Analyze button. \\
+				4. Select Box Plot. \\
+				5. Click Analyze button. \\
+				6. Select Histogram . \\
+				7. Click Analyze button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The analysis results and corresponding chart displayed
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/a1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/a2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/a3.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			6 & Analyze Data(Dot Plot,Line Chart, and Violin Plot) & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Import data. \\
+				2. Select Dot Plot. \\
+				3. Click Analyze button. \\
+				4. Select Line Chart. \\
+				5. Click Analyze button. \\
+				6. Select Violin Plot. \\
+				7. Click Analyze button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The analysis results and corresponding chart displayed
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/a4.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/a5.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/a6.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			7 & Display historical data & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select "Load Prd-data" from Tool menu. \\
+				2. Select data from popup window. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The historical data is displayed based on the selected record
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/olddata1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/olddata2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/olddata3.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			8 & Export Data & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select "Export Data" from Tool menu. \\
+				2. Save the data to the cvs file. \\
+				3. Open the cvs file. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The data is exported to cvs file.
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ed1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ed2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ed3.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ed4.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ed5.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			9 & Analyze high data load & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select "Generate Data" from top menu. \\
+				2. Enter 100000. \\
+				3. Click Ok. \\
+				4. Click Analyze Button\\
+				5. Select "Generate Data" from top menu again.
+				6. Enter 1234.\\
+				7. Click Ok. \\
+				8. Click Analyze Button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				After clicking analyze button for the data load with the size of 100000, the system can proceed the data in the back-end and allow user generate another data load(1234) and analyze it. The system should popup window to remind users that some analysis is being proceed in the back-end.
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ll1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ll2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ll3.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ll4.jpg}}\\
+				
+			\end{minipage} \\
+			\hline
+			
+			\caption{Positive Test Cases}
+			\label{table:Positive Test Cases}
+		\end{longtable}
+		
+		\item Negative User Journey
+		
+		\begin{longtable}{|c|p{3cm}|p{5cm}|c|}
+			\hline
+			\textbf{No.} & \textbf{Test Scenario} & \textbf{Test Steps and Expected Result} & \textbf{Result} \\
+			\hline
+			\endhead
+			
+			1 & Failed login & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Open the login window. \\
+				2. Enter the username "tttt". \\
+				3. Enter the password "tttt". \\
+				4. Click the Ok button.\\
+				
+				\vspace{8pt}
+				\textbf{Expected Result:}\\
+				
+				Popup alter window
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/fl1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/fl2.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			2 & Enter invalidate data & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select the option of "Enter Data" from the menu of "Import Data". \\
+				2. Enter "a,b,d,3,4,5,6" \\
+				3. Click Ok button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The alter window popup
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/fe1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/fe2.jpg}}\\
+				
+			\end{minipage} \\
+			\hline
+			
+			
+			3 & Select cvs file with invalidate data & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select the option of "CVS File" from the menu of "Import Data". \\
+				2. Choose a file with non-integer data". \\
+				3. Click Ok button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The alter window popup
+			\end{minipage}
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ff1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ff2.jpg}}\\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/ff3.jpg}}\\
+			\end{minipage} \\
+			\hline
+			
+			4 & Input invalidate data for the function of Generate data & 
+			\begin{minipage}[b]{5cm}
+				\vspace{8pt}
+				\textbf{Test Step:}\\
+				
+				1. Select the option of "Generate Data" from the menu of "Import Data". \\
+				2. Input "aaaaaa". \\
+				3. Click Ok button. \\
+				
+				\textbf{Expected Result:}\\
+				
+				The alter window popup
+			\end{minipage}
+			
+			& \begin{minipage}[b]{4cm}
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/gg1.jpg}} \\
+				\adjustbox{valign=b}{\includegraphics[width=4cm]{images/gg2.jpg}}\\
+				
+			\end{minipage} \\
+			\hline
+			
+			\caption{Negative Test Cases}
+			\label{table:Negative Test Cases}
+		\end{longtable}
+		
+	\end{itemize}
+	
+	\section{Key Strengths of the System}
+	\begin{enumerate}
+		\item \textbf{Concurrent Processing:} By implementing multithreading, the system can handle multiple operations simultaneously, which is particularly useful for performing complex calculations or managing large datasets without freezing the user interface.
+		
+		\item \textbf{Enhanced Responsiveness:} The use of message queues allows the system to process user requests in an orderly fashion, preventing the system from becoming unresponsive during heavy loads. This means that while large data sets are being processed, users can still input new data, perform other analyses, or interact with the system in other ways without experiencing lag.
+		
+		\item \textbf{Efficient Handling of Large Datasets:} The combination of message queues and multithreading prepares the system to scale up to handle larger datasets without a significant redesign. This makes the system future-proof and ready to grow with the user's needs.
+		
+		\item \textbf{Multiple Data Input Options:} The system offers flexibility in data input methods, including manual entry, automatic generation, and importing from CSV files, catering to different user preferences and scenarios.
+		
+		\item \textbf{Graphical Data Visualization:} The ability to generate various types of data visualizations such as bar charts, box plots, and histograms directly within the system allows for a more intuitive understanding of data distributions and patterns.
+		
+		\item \textbf{Historical Data Visualization:} Users can review and export historical data records, which is invaluable for tracking changes over time and for record-keeping purposes.
+		
+		\item \textbf{Data Validation and Error Handling:} Robust validation and exception handling mechanisms ensure data integrity and provide a safeguard against incorrect data inputs, enhancing the reliability of the system.
+	\end{enumerate}
+	
+	\chapter{Problem 5: Cyclomatic Number}
+	Cyclomatic complexity quantifies the complexity of a program's control flow structure. It is based on the number of linearly independent paths within the code, reflecting the decision points and the intricacy of the program's logic. In the METRICSTICS system, comprising eight core classes—Calculator, EnterDataDialog, GenerateDataDialog, LeftFrame, LoginDialog, MetricsticsApp, MiddleFrame, and RightFrame. The calculation of the cyclomatic number is crucial for assessing code maintainability and for identifying areas that may pose risks due to high complexity.
+	
+	To ensure the accuracy of the cyclomatic complexity evaluation, this analysis utilizes two reputable tools: Lizard and Radon. These tools have been selected for their proven track record in static code analysis. Lizard offers a multi-faceted assessment of code metrics, including cyclomatic complexity, and Radon provides a Python-specific analysis, which is particularly pertinent given that METRICSTICS is developed in Python. By applying both tools in tandem, the aim is to cross-validate the results, thereby enhancing the reliability of the findings.\\
+	\vspace{8pt}
+	The section 4.1 presents the cyclomatic numbers ascertained by each tool for the individual classes.
+	\section{Cyclomatic Complexity Matrix}
+	The tables from 4.1 to 4.8 provide a comprehensive overview of the Cyclomatic Numbers associated with individual methods within each class. These Cyclomatic Numbers Matrix serve as a measure of the control flow complexity for each method, helping to assess the code's structural intricacies and potential areas for optimization or refactoring.
+	
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{12}{*}{Calculator} & \_\_init\_\_ & 1 \\
+			& absolute\_value & 2 \\
+			& descriptive\_statistics & 2 \\
+			& input\_data & 5 \\
+			& maximum & 4 \\
+			& mean & 3 \\
+			& mean\_absolute\_deviation & 4 \\
+			& median & 4 \\
+			& minimum & 4 \\
+			& mode & 7 \\
+			& round\_number & 4 \\
+			& standard\_deviation & 4 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - Calculator}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{3}{*}{EnterDataDialog} & \_\_init\_\_ & 1 \\
+			& body & 1 \\
+			& validate & 8 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - EnterDataDialog}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{4}{*}{GenerateDataDialog} & \_\_init\_\_ & 1 \\
+			& apply & 4 \\
+			& body & 1 \\
+			& validate & 3 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - GenerateDataDialog}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{4}{*}{LeftFrame} & \_\_init\_\_ & 1 \\
+			& get\_data & 4 \\
+			& set\_data & 6 \\
+			& update\_width & 3 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - LeftFrame}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{4}{*}{LoginDialog} & \_\_init\_\_ & 1 \\
+			& apply & 2 \\
+			& body & 1 \\
+			& get\_username & 2 \\
+			& ok & 2 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - LoginDialog}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{8}{*}{MetricsticsApp} & \_\_init\_\_ & 2 \\
+			& enter\_data & 3 \\
+			& export\_data & 6 \\
+			& generate\_data & 3 \\
+			& load\_csv & 7 \\
+			& load\_pre\_data & 6 \\
+			& login & 2 \\
+			& update\_frames & 1 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - MetricsticsApp}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{10}{*}{MiddleFrame} & \_\_init\_\_ & 2 \\
+			& calculate & 2 \\
+			& calculate\_in\_thread & 8 \\
+			& generate\_graphs & 7 \\
+			& get\_results\_data & 6 \\
+			& process\_queue & 3 \\
+			& save\_results\_to\_excel & 6 \\
+			& uset\_results & 2 \\
+			& show\_error\_msg & 1 \\
+			& show\_notification & 1 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - MiddleFrame}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{\multirow{2}{*}{Class}} & \textbf{\multirow{2}{*}{Method}} & \textbf{\multirow{2}{*}{Cyclomatic number}} \\
+			& & \\
+			\hline
+			\multirow{10}{*}{RightFrame} & \_\_init\_\_ & 1 \\
+			& clear & 1 \\
+			& draw\_bar\_chart & 1 \\
+			& draw\_bar\_plot & 1 \\
+			& draw\_dot\_plot & 1 \\
+			& draw\_histogram & 1 \\
+			& draw\_line\_chart & 1 \\
+			& draw\_violin\_plot & 1 \\
+			& set\_background & 1 \\
+			& handle\_exception & 3 \\
+			\hline
+		\end{tabular}
+		\caption{Cyclomatic Number Matrix - RightFrame}
+	\end{table}
+	
+	\section{Qualitative Analysis of Cyclomatic Number Thresholds}
+	The cyclomatic complexity metric offers insight into the control flow of a program's source code, influencing both its maintainability and testability. Applying the defined ranges to the METRICSTICS system's classes, one can draw several qualitative conclusions regarding the system's architecture and potential areas for improvement.
+	
+	\subsection*{I. Calculator Class}
+	With a complexity of 44, the Calculator class is categorized as `very complex', though still manageable. While the class remains testable, the high value suggests that the logic could be intricate, which may complicate the testing process and increase the risk of defects. Refactoring could be beneficial to streamline the control flow and improve the class's maintainability.
+	
+	\subsection*{II. EnterDataDialog Class}
+	The complexity level of 10 places this class at the threshold between `simple' and `complex is well-structured, but any additional complexity could push it into a higher category, potentially complicating future modifications.
+	
+	\subsection*{III. GenerateDataDialog Class}
+	With a score of 9, this class is deemed to have a `simple' control flow. Its straightforward structure likely results in ease of testing and a lower likelihood of bugs, making it an exemplar of clean design within the system.
+	
+	\subsection*{IV. LeftFrame Class}
+	A complexity score of 14 categorizes the LeftFrame class as `complex'. This suggests that while the class is manageable and testable, careful consideration should be given to any additional complexity that could hinder its understandability.
+	
+	\subsection*{V. LoginDialog Class}
+	The LoginDialog class, with a score of 8, is considered `simple'. This indicates a clean and clear control flow, which is advantageous for both testing and maintenance purposes.
+	
+	\subsection*{VI. MetricsticsApp Class}
+	With a cyclomatic complexity of 30, the MetricsticsApp class is `very complex', but within the realm of manageability. Careful management and potential simplification are recommended to prevent it from becoming unwieldy.
+	
+	\subsection*{VII. MiddleFrame Class}
+	The complexity score of 38 also places the MiddleFrame class in the `very complex' category. This complexity can be managed with diligent oversight, but simplification could greatly benefit future maintenance and testing efforts.
+	
+	\subsection*{VIII. RightFrame Class}
+	The RightFrame class has an exceptionally low complexity with consistent scores of 1, falling into the `simple' category. This suggests that the class is highly maintainable and poses minimal risk for errors, exemplifying a streamlined control flow.
+	
+	\vspace{10pt}
+	In summation, the METRICSTICS system displays a varied range of complexities across its classes. While several classes maintain a `simple' control flow, which is ideal, there are notable instances of `complex' and `very complex' categorizations. These findings highlight areas where the system could be optimized to reduce complexity, thereby enhancing maintainability and reducing the cognitive load on developers and testers. It is imperative that the `very complex' classes undergo careful scrutiny to ensure they do not evolve into unmanageable or untestable segments of the system.
+	
+	
+	\chapter{Problem 6: WMC, CF, and LCOM*}
+	\section{WMC Calculations}
+	Let $C$ be a class with methods $M_1, \ldots, M_n$. Let $c_1(M_1), \ldots, c_n(M_n)$ be the complexity (weights) of the methods. Then, Weighted Method Per Class (WMC)is given by:
+	\begin{equation}
+		WMC = \sum_{i=1}^{n} c_i(M_i)
+		\tag{Equation 17}
+	\end{equation}
+	
+	Assume that the weights are not normalized, and due to cyclomatic numbers have
+	been previously calculated for each method (Table 4.1 to 4.8), so to compute the WMC for a class, we sum the	weights assigned to the cyclomatic numbers of all methods within that class.
+	\subsection*{I. Calculator Class}
+	
+	From Table 4.1, the Calculator class has a cyclomatic number of:
+	\begin{align*}
+		\text{Calculator - cyclomatic number} &= 1 + 2 + 2 + 5 + 4 + 3 + 4 + 4 \\
+		&+ 4 + 7 + 4 + 4 \\
+		&= 44
+	\end{align*} 
+	
+	\subsection*{II. EnterDataDialog Class}
+	
+	From Table 4.2, the EnterDataDialog class has a cyclomatic number of:
+	\begin{align*}
+		\text{EnterDataDialog - cyclomatic number} &= 1 + 1 + 8 = 10
+	\end{align*} 
+	
+	\subsection*{III. GenerateDataDialog Class}
+	
+	From Table 4.3, the GenerateDataDialog class has a cyclomatic number of:
+	\begin{align*}
+		\text{GenerateDataDialog - cyclomatic number} &= 1 + 4 + 1 + 3 = 9
+	\end{align*} 
+	
+	\subsection*{IV. LeftFrame Class}
+	
+	From Table 4.4, the LeftFrame class has a cyclomatic number of:
+	\begin{align*}
+		\text{LeftFrame - cyclomatic number} &= 1 + 4 + 6 + 3 = 14
+	\end{align*} 
+	
+	\subsection*{V. LoginDialog Class}
+	
+	From Table 4.5, the LoginDialog class has a cyclomatic number of:
+	\begin{align*}
+		\text{LoginDialog - cyclomatic number} &= 1 + 2 + 1 + 2 + 2 = 8
+	\end{align*} 
+	
+	\subsection*{VI. MetricsticsApp Class}
+	
+	From Table 4.6, the MetricsticsApp class has a cyclomatic number of:
+	\begin{align*}
+		\text{MetricsticsApp - cyclomatic number} &= 2 + 3 + 6 + 3 + 7 + 6 + 2 + 1  \\
+		&= 30
+	\end{align*} 
+	
+	\subsection*{VII. MiddleFrame Class}
+	
+	From Table 4.7, the MiddleFrame class has a cyclomatic number of:
+	\begin{align*}
+		\text{MiddleFrame - cyclomatic number} &= 2 + 2 + 8 + 7 + 6 + 3\\
+		& + 6 + 2 + 1 + 1 \\
+		&= 38
+	\end{align*} 
+	
+	\subsection*{VIII. RightFrame Class}
+	
+	From Table 4.8, the RightFrame class has a cyclomatic number of:
+	\begin{align*}
+		\text{RightFrame - cyclomatic number} &= 1 + 1 + 1 + 1 + 1 + 1\\
+		& + 1 + 1 + 1 + 3 \\
+		&= 12
+	\end{align*} 
+	
+	\section{CF Calculations}
+	The Coupling Factor (CF) is a metric used to evaluate the average coupling between classes in an Object-Oriented Design (OOD) while excluding inheritance relationships. In the context of OOD, let \(C_1, C_2, \ldots, C_n\) represent the classes, where \(n\) is greater than 1.
+	
+	The CF formula is defined as follows:
+	\begin{equation}
+		CF = \frac{\sum_{i=1}^{n} \left( \sum_{j=1}^{n} \text{IsClient}(C_i, C_j) \right)}{n^2 - n}
+		\tag{Equation 18}
+	\end{equation}
+	
+	Where:
+	\begin{align*}
+		& \text{IsClient}(C_i, C_j) \text{ is a characteristic function that equals 1 if class } C_i \text{has a relationship}\\
+		& \text{with class } C_j, \text{ and 0 otherwise. This relationship typically signifies interactions like} \\
+		& \text{method calls, references, or attribute access.} \\
+		& \sum_{i=1}^{n} \text{ computes the sum of relationships for each class } C_i. \\
+		& \sum_{j=1}^{n} \text{ sums the relationships of class } C_i \text{ with all other classes } C_j \text{ (excluding itself).}
+	\end{align*}
+	
+	The denominator \(n^2 - n\) represents the maximum number of possible relationships between classes, excluding self-relationships.
+	
+	\vspace{10pt}
+	Building upon the provided equation, the following content provides a comprehensive explanation and calculation of CF tailored to our  project. 
+	
+	\vspace{10pt}
+	In the class diagram shown in Figure 5.1, n = 8. The IsClient for the MetricsticsApp class is 6, for the MiddleFrame class is 1, for the Calculator class is 0, for the EnterDataDialog class is 0,  for the GenerateDataDialog class is 0,  for the LeftFrame class is 0,  for the RightFrame class is 0, for the LoginDialog class is 0.
+	
+	\vspace{10pt}
+	Therefore,
+	\begin{equation}
+		CF = \frac{6 + 1 + 0 + 0 + 0 + 0 + 0 + 0}{64 - 8} = \frac{7}{56} = 0.125
+		\tag{Equation 19}
+	\end{equation}
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/uml.jpg}
+		\caption{System's Class Diagram}
+		\label{fig:System's Class Diagram}
+	\end{figure}
+	
+	\section{LCOM* Calculations}
+	LCOM*, or Lack of Cohesion in Methods, is a metric used to evaluate the cohesion (or lack thereof) within a class in object-oriented programming. It measures how closely the methods of 	a class are related to each other based on their interactions with the class's attributes.
+	
+	A low LCOM* value is desirable because it suggests that the methods of the class are more cohesive, meaning they work closely together and share common data. On the other hand, a high LCOM* value indicates a lack of cohesion, implying that the methods are relatively independent and not closely tied to the same set of attributes.	
+	
+	\vspace{10pt}
+	\textbf{Steps to Calculate LCOM*:}
+	
+	\begin{enumerate}
+		\item Identify Attributes and Methods:
+		\begin{itemize}[label={$\bullet$}]
+			\item List all attributes (\(A_i\)) and methods (\(M_i\)) of the class.
+		\end{itemize}
+		
+		\item Determine Attribute Access:
+		\begin{itemize}[label={$\bullet$}]
+			\item For each method (\(M_i\)), determine which attributes (\(A_i\)) it accesses.
+		\end{itemize}
+		
+		\item Calculate \(\mu(A_i)\):
+		\begin{itemize}[label={$\bullet$}]
+			\item Count the number of methods that access each attribute (\(A_i\)). This count is denoted as \(\mu(A_i)\).
+		\end{itemize}
+		
+		\item Calculate LCOM*:
+		\begin{itemize}[label={$\bullet$}]
+			\item Calculate using the below mentioned formula:
+			\begin{equation}
+				LCOM^* = \frac{\frac{1}{a} \left[ \sum_{i=1}^{a} \mu(A_i) \right] - m}{1 - m}
+				\tag{Equation 20}
+			\end{equation}
+		\end{itemize}
+		
+		\item Interpret the Result:
+		\begin{itemize}[label={$\bullet$}]
+			\item A lower LCOM* value is preferable, indicating higher cohesion. The range of LCOM* is \([0, 1]\), where 0 signifies maximum cohesion.
+		\end{itemize}
+	\end{enumerate}
+	\vspace{10pt}
+	\textbf{LCOM* calculations for every class:}
+	
+	\subsection*{I. LCOM* for the provided ``Calculator'' class:}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(\(a\)): data(\(A_1\)) = 1
+		\item Methods(\(m\)): \_\_init\_\_, input\_data, minimum, maximum, mode, median, mean, mean\_absolute\_deviation, standard\_deviation, descriptive\_statistics, round\_number, absolute\_value = 12
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item data(\(\mu A_1\)): input\_data, minimum, maximum, mode, median, mean, mean\_absolute\_deviation, standard\_deviation, descriptive\_statistics = 9
+		\end{itemize}
+		\item \(\Sigma \mu(A_i)\): \(A_1\) = 9
+		\item Substituting values in LCOM* formula = (9 - 12)/(1-12) = 0.27
+	\end{enumerate}
+	\textbf{LCOM*(Calculator) = 0.27}
+	
+	
+	\subsection*{II. LCOM* for the provided ``MetricsticsApp'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): username(\(A_1\)), right\_frame(\(A_2\)), csv\_file(\(A_3\)), calculator(\(A_4\)), logo\_image(\(A_5\)) = 5
+		\item Methods(2): \_\_init\_\_, login, update\_frames, enter\_data, generate\_data, load\_csv, load\_pre\_data, export\_data = 8
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item username(\(\mu A_1\)): login, load\_pre\_data = 2
+			\item right\_frame(\(\mu A_2\)): \_\_init\_\_, update\_frames = 2
+			\item csv\_file(\(\mu A_3\)): load\_csv = 1
+			\item calculator(\(\mu A_4\)): \_\_init\_\_ = 1
+			\item logo\_image(\(\mu A_5\)): \_\_init\_\_ = 1
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): \(\mu A_1 + \mu A_2 + \mu A_3 + \mu A_4 + \mu A_5\) = 7
+		\item Substituting values in LCOM* formula = (7 - 40)/(5 * -7) = 0.94
+	\end{enumerate}
+	\textbf{LCOM*(MetricsticsApp) = 0.94}
+	
+	\subsection*{III. LCOM* for the provided ``EnterDataDialog'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): result(\(A_1\)) = 1
+		\item Methods(2): \_\_init\_\_, body, validate = 3
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item result(\(\mu A_1\)): validate = 1
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): \(\mu A_1\) = 1
+		\item Substituting values in LCOM* formula = (1 - 3)/(1 - 3) = 1
+	\end{enumerate}
+	\textbf{LCOM*(EnterDataDialog) = 1}
+	
+	\subsection*{IV. LCOM* for the provided ``GenerateDataDialog'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): decimal\_places(\(A_1\)), result(\(A_2\)) = 2
+		\item Methods(2): \_\_init\_\_, body, validate, apply = 4
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item decimal\_places(\(\mu A_1\)): \_\_init\_\_, apply = 2
+			\item result(\(\mu A_2\)): apply = 1
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): \(\mu A_1 + \mu A_2\) = 3
+		\item Substituting values in LCOM* formula = (3 - 8)/(2 * (1 - 4)) = 0.83
+	\end{enumerate}
+	\textbf{LCOM*(GenerateDataDialog) = 0.83}
+	
+	\subsection*{V. LCOM* for the provided ``LeftFrame'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): loaded\_data\_label(\(A_1\)), data\_table(\(A_2\)), scrollbar(\(A_3\)) = 3
+		\item Methods(2): \_\_init\_\_, update\_width, get\_data, set\_data = 4
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item loaded\_data\_label(\(\mu A_1\)): \_\_init\_\_ = 1
+			\item data\_table(\(\mu A_2\)): \_\_init\_\_, update\_width, get\_data, set\_data = 4
+			\item scrollbar(\(\mu A_3\)): \_\_init\_\_, set\_data = 2
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): \(\mu A_1 + \mu A_2 + \mu A_3\) = 7
+		\item Substituting values in LCOM* formula = (7 - 12)/(3 * -3) = 0.55
+	\end{enumerate}
+	\textbf{LCOM*(LeftFrame) = 0.55}
+	
+	\subsection*{VI. LCOM* for the provided ``RightFrame'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): figure(\(A_1\)), ax(\(A_2\)), canvas(\(A_3\)), canvas\_widget(\(A_4\)), label(\(A_5\)) = 5
+		\item Methods(2): \_\_init\_\_, set\_background, clear, draw\_bar\_chart, draw\_histogram, draw\_box\_plot, draw\_dot\_plot, draw\_line\_chart, draw\_violin\_plot = 9
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item figure(\(\mu A_1\)): \_\_init\_\_, draw\_bar\_chart, draw\_histogram, draw\_box\_plot, draw\_dot\_plot, draw\_line\_chart, draw\_violin\_plot = 7
+			\item ax(\(\mu A_2\)): \_\_init\_\_, draw\_bar\_chart, draw\_histogram, draw\_box\_plot, draw\_dot\_plot, draw\_line\_chart, draw\_violin\_plot = 7
+			\item canvas(\(\mu A_3\)): \_\_init\_\_, set\_background, draw\_bar\_chart, draw\_histogram, draw\_box\_plot, draw\_dot\_plot, draw\_line\_chart, draw\_violin\_plot = 8
+			\item canvas\_widget(\(\mu A_4\)): \_\_init\_\_ = 1
+			\item label(\(\mu A_5\)): \_\_init\_\_ = 1
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): \(\mu A_1 + \mu A_2 + \mu A_3 + \mu A_4 + \mu A_5\) = 24
+		\item Substituting values in LCOM* formula = (24 - 45)/(5 * -7) = 0.525
+	\end{enumerate}
+	\textbf{LCOM*(RightFrame) = 0.525}
+	
+	\subsection*{VII. LCOM* for the provided ``MiddleFrame'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): app(\(A_1\)), calculator(\(A_2\)), right\_frame(\(A_3\)), last\_saved\_data(\(A_4\)), update\_queue(\(A_5\)), task\_running(\(A_6\)), calculate\_button(\(A_7\)), graph\_label(\(A_8\)), selected\_graph\_type(\(A_9\)), graph\_frame(\(A_{10}\)), graph\_types(\(A_{11}\)), results\_frame(\(A_{12}\)), results\_label(\(A_{13}\)), results\_text(\(A_{14}\)), bg\_image(\(A_{15}\)), results\_scroll(\(A_{16}\)) = 17
+		\item Methods(2): \_\_init\_\_, set\_background, clear, draw\_bar\_chart, draw\_histogram, draw\_box\_plot, draw\_dot\_plot, draw\_line\_chart, draw\_violin\_plot, calculate, calculate\_in\_thread, show\_notification, process\_queue, save\_results\_to\_excel, generate\_graphs, set\_results, get\_results\_data = 17
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item app(\(\mu A_1\)): \_\_init\_\_, calculate, calculate\_in\_thread, process\_queue, save\_results\_to\_excel, generate\_graphs, set\_results, get\_results\_data = 8
+			\item calculator(\(\mu A_2\)): \_\_init\_\_, calculate, calculate\_in\_thread, process\_queue, save\_results\_to\_excel, generate\_graphs = 6
+			\item right\_frame(\(\mu A_3\)): \_\_init\_\_, calculate, calculate\_in\_thread, process\_queue, generate\_graphs = 5
+			\item last\_saved\_data(\(\mu A_4\)): \_\_init\_\_, save\_results\_to\_excel = 2
+			\item update\_queue(\(\mu A_5\)): \_\_init\_\_, process\_queue = 2
+			\item task\_running(\(\mu A_6\)): \_\_init\_\_, calculate, calculate\_in\_thread, show\_notification, process\_queue = 5
+			\item calculate\_button(\(\mu A_7\)): \_\_init\_\_, calculate = 2
+			\item graph\_label(\(\mu A_8\)): \_\_init\_\_ = 1
+			\item selected\_graph\_type(\(\mu A_9\)): \_\_init\_\_, calculate, generate\_graphs = 3
+			\item graph\_frame(\(\mu A_{10}\)): \_\_init\_\_, generate\_graphs = 2
+			\item graph\_types(\(\mu A_{11}\)): \_\_init\_\_, generate\_graphs = 2
+			\item results\_frame(\(\mu A_{12}\)): \_\_init\_\_, process\_queue, set\_results = 3
+			\item results\_label(\(\mu A_{13}\)): \_\_init\_\_ = 1
+			\item results\_text(\(\mu A_{14}\)): \_\_init\_\_, set\_results, get\_results\_data = 3
+			\item bg\_image(\(\mu A_{15}\)): \_\_init\_\_ = 1
+			\item results\_scroll(\(\mu A_{16}\)): \_\_init\_\_ = 1
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): Sum of all the attributes and the methods that access them = 50
+		\item Substituting values in LCOM* formula = (50 - 17)/(1 - 17) = 0.805
+	\end{enumerate}
+	\textbf{LCOM*(MiddleFrame) = 0.805}
+	
+	\subsection*{VIII. LCOM* for the provided ``LoginDialog'' class}
+	\begin{enumerate}[label=\arabic*.]
+		\item Attributes(1): username(\(A_1\)), password(\(A_2\)), authenticated(\(A_3\)), user\_data(\(A_4\)), e1(\(A_5\)), e2(\(A_6\)) = 6
+		\item Methods(2): \_\_init\_\_, body, apply, ok, get\_username = 5
+		\item Methods Accessing the Attribute(s):
+		\begin{itemize}[label={$\bullet$}]
+			\item username(\(\mu A_1\)): \_\_init\_\_, apply, ok, get\_username = 4
+			\item password(\(\mu A_2\)): \_\_init\_\_, apply, ok = 3
+			\item authenticated(\(\mu A_3\)): \_\_init\_\_, apply, ok = 3
+			\item user\_data(\(\mu A_4\)): \_\_init\_\_, apply = 2
+			\item e1(\(\mu A_5\)): body, apply, ok = 3
+			\item e2(\(\mu A_6\)): body, apply, ok = 3
+		\end{itemize}
+		\item \(\Sigma\mu(A_i)\): \(\mu A_1 + \mu A_2 + \mu A_3 + \mu A_4 + \mu A_5 + \mu A_6\) = 26
+		\item Substituting values in LCOM* formula = (26 - 5)/(6 * -1) = 0.16
+	\end{enumerate}
+	\textbf{LCOM*(LoginDialog) = 0.16}
+	
+	
+	
+	\section{Conclusions}
+	\subsection*{I. Qualitative Conclusions - WMC}
+	\begin{enumerate}
+		\item \textbf{Calculator Class (WMC: 44):} Moderately complex class due to a relatively high WMC. It involves various mathematical operations.
+		\item \textbf{MetricsticsApp Class (WMC: 30):} Moderate complexity, indicating that it handles several functionalities related to metrics in the application.
+		\item \textbf{EnterDataDialog Class (WMC: 10):} Simple class with low complexity. It likely deals with data entry dialog functionality, making it easily understandable.
+		\item \textbf{GenerateDataDialog Class (WMC: 9):} Simple class with low complexity. It handles data generation with limited complexity.
+		\item \textbf{LeftFrame Class (WMC: 14):} Moderately complex class, probably managing the left frame of the application. It may involve data presentation or manipulation.
+		\item \textbf{MiddleFrame Class (WMC: 38):} Relatively high complexity. This class likely plays a critical role, involving calculations, data management, and results generation.
+		\item \textbf{RightFrame Class (WMC: 12):} Moderately complex class, responsible for graphical representation and exception handling on the right side of the application.
+		\item \textbf{LoginDialog Class (WMC: 8):} Low to moderate complexity. Handles the login dialog functionality, likely with straightforward operations.
+	\end{enumerate}
+	
+	In summary, the complexity distribution of the classes suggests a modular design where each class is responsible for specific tasks. This distribution has maintenance implications, as classes with higher complexity, such as Calculator and MiddleFrame, may demand more attention during maintenance, testing, and debugging. On the other hand, classes with lower complexity, like EnterDataDialog and GenerateDataDialog, tend to be more readable and easier to maintain.
+	
+	\subsection*{II. Qualitative Conclusions - CF}
+	\begin{enumerate}
+		\item \textbf{CF Value (0.125):} The CF value of 0.125 suggests that the average coupling between classes in the project is relatively low. This indicates that there are fewer interclass relationships, which can be considered a positive aspect of the project's design. Lower CF values generally imply reduced complexity and better modularity.
+		\item \textbf{Metric Thresholds:} While the specific metric thresholds may vary depending on the project's requirements and industry standards, a CF value of 0.125 is often considered favorable. It falls below typical thresholds associated with high coupling, which can lead to software that is difficult to maintain and understand.
+		\item \textbf{Low Coupling:} The low CF value indicates that classes in the project have limited dependencies on each other, reducing the risk of ripple effects when making changes to one class. This is a desirable quality for software maintainability and scalability.
+		\item \textbf{Modular Design:} The project's design appears to be modular, with classes exhibiting a relatively low level of interdependence. This modular structure can facilitate code reuse and make it easier to isolate and fix issues when they arise.
+		\item \textbf{Efficient Maintenance:} The lower CF value implies that maintenance and updates to the codebase are likely to be more efficient, as changes in one class are less likely to impact other parts of the system.
+		
+	\end{enumerate}
+	In summary, the calculated CF value of 0.125 suggests that the project's class relationships exhibit low coupling, which aligns with good design principles. This is indicative of a modular and maintainable codebase. However, the specific interpretation may depend on the context and requirements of the project, and it's important to consider other metrics and qualitative aspects of the design for a comprehensive evaluation.
+	
+	\subsection*{III. Qualitative Conclusions - LCOM*}
+	\begin{enumerate}
+		\item \textbf{Calculator Class (LCOM*: 0.27):}
+		The methods in the Calculator class are somewhat cohesive, with a reasonably low LCOM* value. This indicates that the methods tend to access a shared set of attributes, promoting cohesion.
+		
+		\item \textbf{MetricsticsApp Class (LCOM*: 0.94):}
+		The MetricsticsApp class has a high LCOM* value, suggesting a lack of cohesion among its methods. Methods appear to be relatively independent, potentially indicating a design issue with the class.
+		
+		\item \textbf{EnterDataDialog Class (LCOM*: 1):}
+		The EnterDataDialog class has a high LCOM* value, indicating a lack of cohesion among its methods. Methods are relatively independent, potentially making the class less maintainable.
+		
+		\item \textbf{GenerateDataDialog Class (LCOM*: 0.83):}
+		The GenerateDataDialog class exhibits moderate cohesion among its methods, with a relatively lower LCOM* value. Methods share some common attributes, promoting a degree of cohesion.
+		
+		\item \textbf{LeftFrame Class (LCOM*: 0.55):}
+		The LeftFrame class has a moderate LCOM* value, indicating a moderate level of cohesion. Methods seem to interact with a shared set of attributes, contributing to a cohesive design.
+		
+		\item \textbf{RightFrame Class (LCOM*: 0.525):}
+		The RightFrame class shows moderate cohesion, as indicated by its LCOM* value. Methods interact with a common set of attributes to some extent, contributing to a cohesive design.
+		
+		\item \textbf{MiddleFrame Class (LCOM*: 0.805):}
+		The MiddleFrame class has a high LCOM* value, suggesting a lack of cohesion among its methods. This may indicate that methods are relatively independent, potentially impacting maintainability.
+		
+		\item \textbf{LoginDialog Class (LCOM*: 0.16):}
+		The LoginDialog class exhibits low cohesion among its methods, as indicated by the low LCOM* value. Methods appear to be relatively independent, which may impact maintainability.
+	\end{enumerate}
+	In conclusion, the LCOM* values reflect varying levels of cohesion among the classes. Classes with higher LCOM* values have less cohesive methods, while those with lower values tend to exhibit more cohesive designs. These insights can inform decisions regarding code organization and design enhancements to improve maintainability and readability.
+	
+	
+	\chapter{Problem 7: Physical SLOC vs. Logical SLOC}
+	In this section, we delve into the quantitative analysis of the source code developed for our project, employing the measures of physical and logical Source Lines of Code (SLOC). This metric not only serves as a reflection of the coding effort but also offers insights into the complexity and volume of the codebase. To ensure accuracy and objectivity in our assessment, we utilized two well-regarded tools in the field of software metrics: Lizard and Radon. These tools facilitated the computation of physical SLOC and logical SLOC. The application of these instruments enabled us to draw a comprehensive picture of the program’s structure, providing a foundation for further discussions on code quality, maintainability, and efficiency.
+	\section{Physical SLOC Calculations}
+	In the calculation of physical SLOC, we adhered to the rule that a source line of code is defined as any line of program text that is not a comment or blank line, irrespective of the number of statements or fragments of statements present on that line.
+	
+	\vspace{10pt}
+	We conducted an analysis on eight class files within our codebase using the two aforementioned tools and have summarized our findings in a matrix, details of which can be observed from Table 6.1 to 6.8. Within this matrix, we have dissected each class file to determine the physical SLOC for package lines, class declarations, and the respective methods contained within. The final physical SLOC is computed by summing the number of lines of code for package declarations, class declarations, and all the methods. In alignment with the definition of physical SLOC, we have excluded comments and blank lines from this calculation.
+	
+	\vspace{10pt}
+	The final physical SLOC is computed by summing the number of lines of code for package declarations, class declarations, and all the methods: \( \text{Physical SLOC} = \text{Lines of Package Declarations} + \text{Lines of Class Declarations} + \sum (\text{Lines of Each Method}) \).
+	
+	\vspace{10pt}
+	Based on the table 6.1 to table 6.8, the Physical SLOC for each class file is:
+	
+	\begin{itemize}
+		\item Physical SLOC of class file Calculator = 126.
+		\item Physical SLOC of class file EnterDataDialog = 30.
+		\item Physical SLOC of class file GenerateDataDialog = 32.
+		\item Physical SLOC of class file LeftFrame = 59.
+		\item Physical SLOC of class file LoginDialog = 44.
+		\item Physical SLOC of class file MetricsticsApp = 158.
+		\item Physical SLOC of class file MiddleFrame = 159.
+		\item Physical SLOC of class file RightFrame = 201.
+	\end{itemize}
+	
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{3cm}|m{1.5cm}|m{2.5cm}|m{5cm}|m{2cm}|}
+			\hline
+			\textbf{Class File} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{11}{*}{\centering Calculator} & \multirow{11}{*}{\centering 0} & \multirow{11}{*}{\centering 1} & \_\_init\_\_ & 2 \\
+			\cline{4-5}
+			& & & absolute\_value & 5 \\
+			\cline{4-5}
+			& & & descriptive\_statistics & 13 \\
+			\cline{4-5}
+			& & & input\_data & 12 \\
+			\cline{4-5}
+			& & & maximum & 9 \\
+			\cline{4-5}
+			& & & mean & 9 \\
+			\cline{4-5}
+			& & & mean\_absolute\_deviation & 8 \\
+			\cline{4-5}
+			& & & median & 17 \\
+			\cline{4-5}
+			& & & minimum & 9 \\
+			\cline{4-5}
+			& & & mode & 19 \\
+			\cline{4-5}
+			& & & round\_number & 12 \\
+			\cline{4-5}
+			& & & standard\_deviation & 10 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for Calculator class file.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{3}{*}{\centering EnterDataDialog} & \multirow{3}{*}{\centering 2} & \multirow{3}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 2 \\
+			\cline{4-5}
+			& & & body & \centering\arraybackslash 11 \\
+			\cline{4-5}
+			& & & validate & \centering\arraybackslash 14 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for EnterDataDialog class file.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{4}{*}{\centering GenerateDataDialog} & \multirow{4}{*}{\centering 3} & \multirow{4}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 3 \\
+			\cline{4-5}
+			& & & apply & \centering\arraybackslash 13 \\
+			\cline{4-5}
+			& & & body & \centering\arraybackslash 6 \\
+			\cline{4-5}
+			& & & validate & \centering\arraybackslash 6 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for GenerateDataDialog class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{4}{*}{\centering LeftFrame} & \multirow{4}{*}{\centering 2} & \multirow{4}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 17 \\
+			\cline{4-5}
+			& & & get\_data & \centering\arraybackslash 12 \\
+			\cline{4-5}
+			& & & set\_data & \centering\arraybackslash 16 \\
+			\cline{4-5}
+			& & & update\_width & \centering\arraybackslash 11 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for LeftFrame class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{3cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{5}{*}{\centering LoginDialog} & \multirow{5}{*}{\centering 3} & \multirow{5}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 6 \\
+			\cline{4-5}
+			& & & apply & \centering\arraybackslash 12 \\
+			\cline{4-5}
+			& & & body & \centering\arraybackslash 16 \\
+			\cline{4-5}
+			& & & get\_username & \centering\arraybackslash 2 \\
+			\cline{4-5}
+			& & & ok & \centering\arraybackslash 4 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for LoginDialog class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{3cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{8}{*}{\centering MetricsticsApp} & \multirow{8}{*}{\centering 13} & \multirow{8}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 49 \\
+			\cline{4-5}
+			& & & enter\_data & \centering\arraybackslash 7 \\
+			\cline{4-5}
+			& & & export\_data & \centering\arraybackslash 17 \\
+			\cline{4-5}
+			& & & generate\_data & \centering\arraybackslash 7 \\
+			\cline{4-5}
+			& & & load\_csv & \centering\arraybackslash 19 \\
+			\cline{4-5}
+			& & & load\_pre\_data & \centering\arraybackslash 31 \\
+			\cline{4-5}
+			& & & login & \centering\arraybackslash 5 \\
+			\cline{4-5}
+			& & & update\_frames & \centering\arraybackslash 9 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for MetricsticsApp class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{3cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{10}{*}{\centering MiddleFrame} & \multirow{10}{*}{\centering 8} & \multirow{10}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 38 \\
+			\cline{4-5}
+			& & & calculate & \centering\arraybackslash 5 \\
+			\cline{4-5}
+			& & & calculate\_in\_thread & \centering\arraybackslash 29 \\
+			\cline{4-5}
+			& & & generate\_graphs & \centering\arraybackslash 14 \\
+			\cline{4-5}
+			& & & get\_results\_data & \centering\arraybackslash 17 \\
+			\cline{4-5}
+			& & & process\_queue & \centering\arraybackslash 9 \\
+			\cline{4-5}
+			& & & save\_results\_to\_excel & \centering\arraybackslash 25 \\
+			\cline{4-5}
+			& & & set\_results & \centering\arraybackslash 6 \\
+			\cline{4-5}
+			& & & show\_error\_msg & \centering\arraybackslash 2 \\
+			\cline{4-5}
+			& & & show\_notification & \centering\arraybackslash 5 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for MiddleFrame class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{3cm}|m{1.5cm}|m{2.5cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Package line} & \textbf{Class declaration} & \textbf{Method} & \textbf{Physical SLOC} \\
+			\hline
+			\multirow{10}{*}{\centering RightFrame} & \multirow{10}{*}{\centering 6} & \multirow{10}{*}{\centering 1} & \_\_init\_\_ & \centering\arraybackslash 13 \\
+			\cline{4-5}
+			& & & clear & \centering\arraybackslash 2 \\
+			\cline{4-5}
+			& & & draw\_bar\_chart & \centering\arraybackslash 33 \\
+			\cline{4-5}
+			& & & draw\_box\_plot & \centering\arraybackslash 23 \\
+			\cline{4-5}
+			& & & draw\_dot\_plot & \centering\arraybackslash 27 \\
+			\cline{4-5}
+			& & & draw\_histogram & \centering\arraybackslash 23 \\
+			\cline{4-5}
+			& & & draw\_line\_chart & \centering\arraybackslash 30 \\
+			\cline{4-5}
+			& & & draw\_violin\_plot & \centering\arraybackslash 30 \\
+			\cline{4-5}
+			& & & set\_background & \centering\arraybackslash 6 \\
+			\cline{4-5}
+			& & & handle\_exception & \centering\arraybackslash 7 \\
+			\hline
+		\end{tabular}
+		\caption{Physical SLOC for RightFrame class methods.}
+	\end{table}
+	
+	\section{Logical SLOC Calculations}
+	In the context of software metrics, Logical Source Lines of Code (Logical SLOC) differs from Physical SLOC in that it measures the number of executable statements, which can be more indicative of the complexity and the amount of work involved in developing software. A logical statement may span multiple physical lines, but it is counted as one logical line of code.
+	
+	\vspace{10pt}
+	Logical SLOC is defined as the count of executable statements, encompassing control structures, data declarations, and executable instructions. Our analytical review encompassed eight class files from our repository, employing tools designed to specifically calculate Logical SLOC. The results of this investigation are consolidated into a series of matrices, presented from Table 6.9 to 6.16. Within these matrices, each method is meticulously examined to ascertain the Logical SLOC .
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{3cm}|m{5cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{12}{*}{Calculator} & \_\_init\_\_ & 2 \\
+			\cline{2-3}
+			& absolute\_value & 5 \\
+			\cline{2-3}
+			& descriptive\_statistics & 6 \\
+			\cline{2-3}
+			& input\_data & 12 \\
+			\cline{2-3}
+			& maximum & 9 \\
+			\cline{2-3}
+			& mean & 9 \\
+			\cline{2-3}
+			& mean\_absolute\_deviation & 8 \\
+			\cline{2-3}
+			& median & 17 \\
+			\cline{2-3}
+			& minimum & 9 \\
+			\cline{2-3}
+			& mode & 19 \\
+			\cline{2-3}
+			& round\_number & 12 \\
+			\cline{2-3}
+			& standard\_deviation & 10 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for Calculator class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{3}{*}{EnterDataDialog} & \_\_init\_\_ & 2 \\
+			\cline{2-3}
+			& body & 11 \\
+			\cline{2-3}
+			& validate & 14 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for EnterDataDialog class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{4}{*}{GenerateDataDialog} & \_\_init\_\_ & 3 \\
+			\cline{2-3}
+			& apply & 13 \\
+			\cline{2-3}
+			& body & 6 \\
+			\cline{2-3}
+			& validate & 6 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for GenerateDataDialog class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{4}{*}{LeftFrame} & \_\_init\_\_ & 17 \\
+			\cline{2-3}
+			& get\_data & 12 \\
+			\cline{2-3}
+			& set\_data & 16 \\
+			\cline{2-3}
+			& update\_width & 11 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for LeftFrame class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{5}{*}{LoginDialog} & \_\_init\_\_ & 6 \\
+			\cline{2-3}
+			& apply & 12 \\
+			\cline{2-3}
+			& body & 17 \\
+			\cline{2-3}
+			& get\_username & 2 \\
+			\cline{2-3}
+			& ok & 4 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for LoginDialog class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{8}{*}{MetricsticsApp} & \_\_init\_\_ & 46 \\
+			\cline{2-3}
+			& enter\_data & 7 \\
+			\cline{2-3}
+			& export\_data & 16 \\
+			\cline{2-3}
+			& generate\_data & 7 \\
+			\cline{2-3}
+			& load\_csv & 15 \\
+			\cline{2-3}
+			& load\_pre\_data & 32 \\
+			\cline{2-3}
+			& login & 5 \\
+			\cline{2-3}
+			& update\_frames & 9 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for MetricsticsApp class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{10}{*}{MiddleFrame} & \_\_init\_\_ & 35 \\
+			\cline{2-3}
+			& calculate & 5 \\
+			\cline{2-3}
+			& calculate\_in\_thread & 30 \\
+			\cline{2-3}
+			& generate\_graphs & 14 \\
+			\cline{2-3}
+			& get\_results\_data & 17 \\
+			\cline{2-3}
+			& process\_queue & 9 \\
+			\cline{2-3}
+			& save\_results\_to\_excel & 25 \\
+			\cline{2-3}
+			& set\_results & 6 \\
+			\cline{2-3}
+			& show\_error\_msg & 2 \\
+			\cline{2-3}
+			& show\_notification & 2 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for MiddleFrame class methods.}
+	\end{table}
+	
+	\begin{table}[htbp]
+		\centering
+		\begin{tabular}{|m{4cm}|m{4cm}|m{2cm}|}
+			\hline
+			\textbf{Class file} & \textbf{Method} & \textbf{Logical SLOC} \\
+			\hline
+			\multirow{10}{*}{RightFrame} & \_\_init\_\_ & 13 \\
+			\cline{2-3}
+			& clear & 2 \\
+			\cline{2-3}
+			& draw\_bar\_chart & 31 \\
+			\cline{2-3}
+			& draw\_box\_plot & 23 \\
+			\cline{2-3}
+			& draw\_dot\_plot & 27 \\
+			\cline{2-3}
+			& draw\_histogram & 23 \\
+			\cline{2-3}
+			& draw\_line\_chart & 30 \\
+			\cline{2-3}
+			& draw\_violin\_plot & 30 \\
+			\cline{2-3}
+			& set\_background & 6 \\
+			\cline{2-3}
+			& handle\_exception & 7 \\
+			\hline
+		\end{tabular}
+		\caption{Logical SLOC for RightFrame class methods.}
+	\end{table}
+	
+	
+	\section{Conclusions}
+	Utilizing the data provided in the tables for Physical and Logical SLOC, we can infer specific aspects of the codebase for each class file and make targeted observations:
+	
+	\begin{enumerate}
+		\item \textbf{Calculator Class:} With a Physical SLOC of 126 and a Logical SLOC for methods ranging from 2 to 19, this class appears to have a moderate level of complexity. Methods like median and mode with higher Logical SLOC suggest more intricate logic that might need careful attention during maintenance.
+		\item \textbf{EnterDataDialog Class:} This class has a relatively low Physical SLOC of 30, indicating a smaller size. The Logical SLOC values suggest straightforward methods, which might indicate a well-structured and potentially easier to maintain dialog interface.
+		\item \textbf{GenerateDataDialog Class:} With a Physical SLOC of 32 and Logical SLOC values not exceeding 13, it shows a balance, possibly due to well-contained methods and a clear focus on functionality.
+		\item \textbf{LeftFrame Class:} The Logical SLOC peaks at 17 for the \_\_init\_\_ method, which might suggest that the initialization process for this class is quite complex and could benefit from refactoring if it impacts maintainability.
+		\item \textbf{LoginDialog Class:} The Logical SLOC for methods in this class are relatively low, with a maximum of 17, which implies that the methods might be well-defined with single responsibilities, making the class more maintainable.
+		\item \textbf{MetricsticsApp Class:} This class has the highest Physical SLOC of 158, indicating a significant amount of code. The Logical SLOC distribution shows several methods with higher values, such as load\_pre\_data, which may require optimization or refactoring to improve understandability and ease of changes.
+		\item \textbf{MiddleFrame Class:} With a Physical SLOC of 159 and a Logical SLOC range from 2 to 35, this class seems to have a mix of simple and complex methods. The \_\_init\_\_ method, having the highest Logical SLOC, might be overloaded and could be simplified.
+		\item \textbf{RightFrame Class:}The Physical SLOC is the highest at 201, and the Logical SLOC has several methods with values over 20, which suggests that this class is quite complex and may be doing too much. It could be a prime candidate for decomposition into smaller classes or methods.
+	\end{enumerate}
+	From these observations, one can conclude that there are disparities in complexity and potential refactoring needs across the classes. Classes like RightFrame and MiddleFrame may benefit from a detailed review to simplify complex methods, whereas classes like EnterDataDialog and LoginDialog may be examples of concise and focused design. The data suggests that there may be an opportunity to standardize the approach to complexity across the codebase to enhance overall maintainability.
+	
+	\chapter{Problem 8: Correlations - Logical SLOC vs. WMC}
+	\section{Scatter Plot}
+	In Figure 7.1, we observe a scatter plot presenting the correlation between data for Logical Source Lines of Code (SLOC) and Weighted Methods per Class (WMC), as derived from METRICSTICS. By visually mapping out the data points on the scatter plot, discernible patterns and trends become apparent. WMC, denoting "Weighted Methods per Class," functions as a metric to gauge the complexity of a class, shedding light on both the quantity and intricacy of methods within a class. Meanwhile, Logical SLOC quantifies the size or complexity of a software project by considering the number of logical statements or instructions in the source code that impact the program's control flow or behavior. Scrutinizing these values on the scatter plot provides valuable insights into the relationship between SLOC and WMC within a given system.
+	
+	\begin{table}[htbp]
+		\centering
+		
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{Class} & \textbf{WMC} & \textbf{SLOC (L)} \\
+			\hline
+			LoginDialog & 8 & 41 \\
+			\hline
+			GenerateDataDialog & 9 & 28 \\
+			\hline
+			EnterDataDialog & 10 & 27 \\
+			\hline
+			RightFrame	& 12 & 192 \\
+			\hline
+			LeftFrame & 14 & 56 \\
+			\hline
+			MetricsticsApp & 30 & 137 \\
+			\hline
+			MiddleFrame	 & 38 & 145 \\
+			\hline
+			Calculator	& 44 & 118 \\
+			\hline
+		\end{tabular}
+		\caption{Class Metrics}
+	\end{table}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/ScatterPlot.png}
+		\caption{Scatter Plot (Logical SLOC and WMC}
+		\label{fig:Scatter Plot (Logical SLOC and WMC}
+	\end{figure}
+	
+	\section{Correlation Coefficient}
+	Within this section, we calculate the correlation coefficient between WMC and SLOC(L). Utilizing separate histograms for WMC values and SLOC(L) values, we observe that these values do not adhere to a normal distribution. The non-normal distribution of the x-values (WMC) and y-values becomes evident in Figure 7.2 and 7.3.
+	
+	Given the non-normal distribution of these values, the Spearman’s Rank Correlation Coefficient (rs) is employed to determine the correlation coefficient. Spearman’s Rank Correlation Coefficient (rs) serves as a measure of association for attribute values that deviate from a normal distribution, as indicated in the Lecture Slides. To compute rs, the data in each set of WMC (x) and SLOC(L) (y) are individually ranked in ascending order by rank (xi) and rank (yi). Let n represent the number of pairs of (x, y), and di denote the difference between the ranks (xi) and (yi). The formula for rs is then given by:
+	\[ r_{s} = 1 - \frac{6\sum_{i=n}^{n}{d^{2}_i}}{n^{3}-n} \]\\
+	
+	\begin{table}[htbp]
+		\centering
+		
+		\begin{tabular}{|c|c|c|c|c|c|}
+			\hline
+			$WMC(x_i)$ & Rank($x_i$) & SLOC(L)($y_i$) & Rank($y_i$) & $d$ & $d^2$ \\
+			\hline
+			8 &	1	&41 &	3 &	-2	&4 \\
+			9	&2	&28 &	1 &	1 &	1 \\
+			10 & 3 & 27 &	2 &	1 &	1 \\
+			12 & 4 &	192 &	8 &	-4 &	16 \\
+			14 &	5	& 56	& 4 &	1 &	1\\
+			30 &	6 &	137 &	6 &	0 &	0\\
+			38 &	7 &	145 &	7	& 0 &	0 \\
+			44 &	8	& 118 &	5 &	3 &	9\\
+			
+			
+			
+			\hline
+		\end{tabular}
+		\caption{Data Table}
+	\end{table}
+	The value of n is 8 for this particular system. All calculations are done based on the values from table 7.2. Spearman’s Rank Correlation Coefficient can range from -1 to 1. The closer the value is to 1 the stronger the correlation it will have. For the system of METRICSTICS the coefficient value is 0.378 which shows a strong correlation between WMC and SLOC(L). The value of coefficient suggests that in case the logical SLOC increases there is a high chance WMC will increase too. But conclusively we cannot say only SLOC has an impact on WMC or vice versa but many other underlying factors may also have an effect on these values. It is important to take in account all metrics of software to make justification of change.
+	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/HistoWMC.png}
+		\caption{Correlation Coefficient (WMC)}
+		\label{fig:Correlation Coefficient (WMC)}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{images/HIstoSLOC.png}
+		\caption{Correlation Coefficient (Logical SLOC)}
+		\label{fig:Correlation Coefficient (Logical SLOC)}
+	\end{figure}
+	
+	\chapter{References}
+	\begin{enumerate}
+		\renewcommand{\labelenumi}{[\theenumi]}
+		\item V. R. Basili, G. Caldiera, and H. D. Rombach, \textit{The Goal Question Metric Approach}, in Encyclopedia of Software Engineering, vol. 2, pp. 528--532, 1994.
+		\item A. Cockburn, \textit{Writing Effective Use Cases}, Addison-Wesley Professional, 2000.
+		\item N. Fenton and S. L. Pfleeger, \textit{Software Metrics: A Rigorous and Practical Approach}, PWS Publishing Co., 1996.
+		\item ISO/IEC, \textit{ISO/IEC 9126: Software engineering — Product quality — Part 1: Quality model}, International Organization for Standardization, 1999.
+		\item SOEN 6611 - Course Material http://users.encs.concordia.ca/~kamthan/courses/
+		soen-6611/
+	\end{enumerate}
+	
+\end{document}

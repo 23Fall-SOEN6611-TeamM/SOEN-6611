@@ -1,0 +1,32 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{List of Symbols and Abbreviations}{1}{chapter*.2}%
+\contentsline {chapter}{List of Figures}{2}{chapter*.3}%
+\contentsline {chapter}{List of Tables}{4}{chapter*.4}%
+\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}%
+\contentsline {section}{\numberline {1.1}System Information}{5}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Assumptions}{5}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Problem 3: Use Case Points(UCP)}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Project Estimation - UCP}{7}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Project Estimation - COCOMO 81}{11}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Estimation - UCP vs. COCOMO 81 vs. Actual Effort }{12}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Problem 4: METRICSTICS System}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}System Implementation}{14}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Algorithm Implementation Of Calculator}{19}{section.3.2}%
+\contentsline {section}{\numberline {3.3}System Testing}{26}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Key Strengths of the System}{40}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Problem 5: Cyclomatic Number}{42}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Cyclomatic Complexity Matrix}{42}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Qualitative Analysis of Cyclomatic Number Thresholds}{43}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Problem 6: WMC, CF, and LCOM*}{48}{chapter.5}%
+\contentsline {section}{\numberline {5.1}WMC Calculations}{48}{section.5.1}%
+\contentsline {section}{\numberline {5.2}CF Calculations}{50}{section.5.2}%
+\contentsline {section}{\numberline {5.3}LCOM* Calculations}{51}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Conclusions}{57}{section.5.4}%
+\contentsline {chapter}{\numberline {6}Problem 7: Physical SLOC vs. Logical SLOC}{61}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Physical SLOC Calculations}{61}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Logical SLOC Calculations}{65}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Conclusions}{65}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Problem 8: Correlations - Logical SLOC vs. WMC}{71}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Scatter Plot}{71}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Correlation Coefficient}{72}{section.7.2}%
+\contentsline {chapter}{\numberline {8}References}{75}{chapter.8}%
